@@ -66,16 +66,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <strong>AtherPanel</strong>
           <small>LEAVER ACCESS REVIEW</small>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setTutorialOpen(true)}
-          className="ml-auto p-1.5 rounded-lg text-slate-400 hover:text-emerald-700 hover:bg-emerald-50 transition-colors cursor-pointer"
-          title="Start Interactive Tour"
-          aria-label="Start Interactive Tour"
-        >
-          <BookOpen size={17} />
-        </button>
       </div>
 
       {/* Main Navigation Items (Prominent Scaled Tabs) */}
@@ -102,7 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <span className="sidebar-item-label">{item.label}</span>
 
               {item.badge !== null && (
-                <span className={`text-[10.5px] font-mono px-2 py-0.5 rounded-full font-bold ml-auto ${
+                <span className={`text-[11px] font-sans px-2 py-0.2 rounded-full font-bold ml-auto ${
                   isActive
                     ? 'bg-emerald-900 text-emerald-100'
                     : typeof item.badge === 'number' && item.badge > 0

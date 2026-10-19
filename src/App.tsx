@@ -155,34 +155,19 @@ export const App: React.FC = () => {
 
           {/* AtherPanel Topbar Actions */}
           <div className="ribbon-actions">
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-700">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700">
               <span className={`w-2 h-2 rounded-full ${agentState.isRunning ? 'bg-amber-500 animate-pulse' : 'bg-emerald-600'}`} />
               <span>{agentState.isRunning ? 'Auditing...' : 'Audit Ready'}</span>
-            </span>
-
-            <span className="hidden lg:inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
-              <Sparkles size={12} className="text-emerald-600" />
-              <span>Gemini 3.5 Flash-Lite</span>
             </span>
 
             <button
               type="button"
               onClick={() => setTutorialOpen(true)}
-              className="p-1.5 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer"
-              title="Interactive Tour"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-slate-600 hover:text-emerald-800 hover:bg-emerald-50 rounded-lg border border-slate-200 transition-colors cursor-pointer"
+              title="Start Interactive Tour"
             >
-              <BookOpen size={18} />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('settings')}
-              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                activeTab === 'settings' ? 'bg-emerald-100 text-emerald-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-              title="Account Settings"
-            >
-              <SettingsIcon size={18} />
+              <BookOpen size={14} />
+              <span>Tour</span>
             </button>
           </div>
         </header>

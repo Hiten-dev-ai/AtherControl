@@ -334,54 +334,43 @@
 }
 
 .settings-category-group button {
-  display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) 16px;
+  display: flex;
   align-items: center;
-  min-height: 52px;
+  position: relative;
+  width: 100%;
+  min-height: 44px;
   gap: 10px;
-  padding: 6px 10px;
+  padding: 0 12px;
   border-radius: 10px;
+  text-align: left;
   color: var(--text-muted);
   background: transparent;
-  text-align: left;
   transition: all var(--motion-quick) var(--motion-ease);
   border: none;
   cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .settings-category-group button > span:first-child {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   background: var(--surface);
   border: 1px solid var(--border);
-}
-
-.settings-category-group button > span:nth-child(2) {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  gap: 1.5px;
+  flex-shrink: 0;
 }
 
 .settings-category-group button strong {
-  font-size: 12.5px;
-  font-weight: 700;
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--text);
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.settings-category-group button small {
-  overflow: hidden;
-  font-size: 10px;
-  line-height: 1.25;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--text-muted);
 }
 
 .settings-category-group button:hover {
@@ -392,14 +381,11 @@
 .settings-category-group button.active {
   background: var(--accent-fill);
   color: var(--accent-fill-ink);
+  font-weight: 700;
 }
 
 .settings-category-group button.active strong {
   color: var(--accent-fill-ink);
-}
-
-.settings-category-group button.active small {
-  color: color-mix(in srgb, var(--accent-fill-ink) 80%, transparent);
 }
 
 .settings-content {

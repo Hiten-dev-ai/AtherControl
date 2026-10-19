@@ -4,14 +4,13 @@ import {
   ChevronRight, 
   UserRound, 
   LockKeyhole, 
-  SlidersHorizontal, 
   Key, 
   Sparkles, 
   ShieldCheck, 
   Check, 
   Save, 
   Copy,
-  AlertCircle
+  ChevronDown
 } from 'lucide-react';
 
 export interface AuditorUser {
@@ -30,16 +29,16 @@ const SETTINGS_GROUPS = [
   {
     name: 'Personal',
     items: [
-      { id: 'profile', label: 'Profile', detail: 'Auditor identity and signature', icon: UserRound },
-      { id: 'security', label: 'Security & MFA', detail: 'SOC 2 multi-factor session', icon: LockKeyhole },
-      { id: 'credentials', label: 'Test Credentials', detail: 'Evaluation accounts & role switcher', icon: Key },
+      { id: 'profile', label: 'Profile', icon: UserRound },
+      { id: 'security', label: 'Security & MFA', icon: LockKeyhole },
+      { id: 'credentials', label: 'Test Credentials', icon: Key },
     ]
   },
   {
     name: 'Workspace & AI',
     items: [
-      { id: 'ai', label: 'AI Engine (Gemini)', detail: 'gemini-3.5-flash-lite config', icon: Sparkles },
-      { id: 'policies', label: 'Audit Policies & SLA', detail: 'SOC 2 CC6.2 24h mandate', icon: ShieldCheck },
+      { id: 'ai', label: 'AI Engine (Gemini)', icon: Sparkles },
+      { id: 'policies', label: 'Audit Policies & SLA', icon: ShieldCheck },
     ]
   }
 ];
@@ -97,7 +96,7 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
           {SETTINGS_GROUPS.map(group => (
             <div key={group.name} className="settings-category-group">
               <p>{group.name}</p>
-              <div>
+              <div className="space-y-1">
                 {group.items.map(item => {
                   const Icon = item.icon;
                   const isActive = selectedCategory === item.id;
@@ -109,13 +108,10 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
                       className={isActive ? 'active' : ''}
                     >
                       <span>
-                        <Icon size={18} />
+                        <Icon size={16} />
                       </span>
-                      <span>
-                        <strong>{item.label}</strong>
-                        <small>{item.detail}</small>
-                      </span>
-                      <ChevronRight size={15} />
+                      <strong>{item.label}</strong>
+                      <ChevronRight size={14} className="sidebar-item-chevron ml-auto" />
                     </button>
                   );
                 })}
@@ -129,26 +125,26 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
       <section className="settings-content">
         <div className="settings-panel max-w-3xl">
           <div className="settings-heading">
-            <span className="eyebrow">AtherPanel Settings</span>
+            <span className="eyebrow">Settings</span>
             <h1>{activeGroupItem.label}</h1>
           </div>
 
           {/* Profile Panel */}
           {selectedCategory === 'profile' && (
             <form onSubmit={handleSaveProfile} className="settings-card space-y-5">
-              <div className="flex items-center gap-4 pb-4 border-b border-slate-100">
-                <div className="w-14 h-14 rounded-xl bg-emerald-700 text-white font-bold text-lg grid place-items-center">
+              <div className="flex items-center gap-3.5 pb-4 border-b border-slate-100">
+                <div className="w-12 h-12 rounded-xl bg-emerald-700 text-white font-bold text-base grid place-items-center">
                   {formData.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">{formData.name}</h3>
-                  <p className="text-xs text-slate-500 font-mono">{formData.role} • AcmeCorp SOC 2 Signer</p>
+                  <h3 className="text-sm font-bold text-slate-900">{formData.name}</h3>
+                  <p className="text-xs text-slate-500">{formData.role}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 font-mono mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Auditor Display Name
                   </label>
                   <input
@@ -161,7 +157,7 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 font-mono mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
                     Role & Title
                   </label>
                   <input
@@ -174,8 +170,8 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-700 font-mono mb-1">
-                    Email Address (Sign-off Authority)
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Email Address
                   </label>
                   <input
                     type="email"
@@ -188,13 +184,13 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
               </div>
 
               <div className="flex items-center justify-between pt-4 border-t border-slate-100">
-                {saveSuccess ? (
-                  <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 font-medium font-mono">
-                    <Check size={14} /> Profile preferences saved!
-                  </span>
-                ) : (
-                  <span className="text-xs text-slate-400 font-mono">Changes persist across session</span>
-                )}
+                <div>
+                  {saveSuccess && (
+                    <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 font-semibold">
+                      <Check size={14} /> Preferences saved!
+                    </span>
+                  )}
+                </div>
 
                 <button
                   type="submit"
@@ -211,58 +207,65 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
           {selectedCategory === 'credentials' && (
             <div className="settings-card space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">Evaluation & Hackathon Test Personas</h3>
-                  <p className="text-xs text-slate-500">Switch between pre-configured auditor credentials to test role authorization and sign-off policies.</p>
-                </div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <h3 className="text-sm font-bold text-slate-900">Evaluation Personas</h3>
+                <span className="px-2 py-0.5 rounded text-[10.5px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
                   Ready to Test
                 </span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {[
                   {
                     name: 'Hiten S',
                     email: 'hiten.dev.ai@gmail.com',
                     role: 'Lead Information Security Auditor',
-                    level: 'Level 3 (Full HITL Approval & Revoke Authority)',
+                    level: 'Level 3: Full HITL Approval & Revoke Authority',
                     active: formData.email === 'hiten.dev.ai@gmail.com'
                   },
                   {
                     name: 'Alex Morgan',
                     email: 'alex.secops@acmecorp.io',
                     role: 'SecOps Administrator',
-                    level: 'Level 2 (Deprovisioning Executor)',
+                    level: 'Level 2: Deprovisioning Executor',
                     active: formData.email === 'alex.secops@acmecorp.io'
                   },
                   {
                     name: 'Elena Rostova',
                     email: 'elena.compliance@acmecorp.io',
                     role: 'Compliance & Audit Officer',
-                    level: 'Level 1 (Read-Only Auditor & Report Exporter)',
+                    level: 'Level 1: Read-Only Auditor',
                     active: formData.email === 'elena.compliance@acmecorp.io'
                   }
                 ].map((persona) => (
                   <div
                     key={persona.email}
-                    className={`p-3.5 rounded-xl border transition-all flex items-center justify-between ${
+                    className={`p-3 rounded-xl border transition-all flex items-center justify-between ${
                       persona.active
                         ? 'border-emerald-600 bg-emerald-50/40 shadow-xs'
                         : 'border-slate-200 bg-white hover:bg-slate-50'
                     }`}
                   >
-                    <div className="space-y-1">
+                    <div className="space-y-0.5">
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-xs text-slate-900">{persona.name}</span>
+                        <span className="font-bold text-xs text-slate-900">{persona.name}</span>
                         {persona.active && (
-                          <span className="px-1.5 py-0.2 rounded text-[9.5px] font-mono font-semibold bg-emerald-700 text-white">
+                          <span className="px-1.5 py-0.2 rounded text-[9.5px] font-semibold bg-emerald-700 text-white">
                             Active
                           </span>
                         )}
                       </div>
-                      <div className="text-[11px] font-mono text-slate-500">{persona.email} • {persona.role}</div>
-                      <div className="text-[10.5px] text-emerald-800 font-mono font-medium">{persona.level}</div>
+                      <div className="text-xs text-slate-500">{persona.role} • {persona.email}</div>
+                      
+                      {/* Collapsible detail dropdown */}
+                      <details className="pt-1 group">
+                        <summary className="text-[11px] text-slate-400 hover:text-slate-700 cursor-pointer select-none flex items-center gap-1 list-none">
+                          <ChevronDown size={12} className="group-open:rotate-180 transition-transform" />
+                          <span>Permissions</span>
+                        </summary>
+                        <div className="text-[11px] text-emerald-800 font-medium mt-1">
+                          {persona.level}
+                        </div>
+                      </details>
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -281,7 +284,7 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
                         disabled={persona.active}
                         className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-40 transition-colors cursor-pointer"
                       >
-                        {persona.active ? 'Current User' : 'Switch To This Account'}
+                        {persona.active ? 'Current User' : 'Switch'}
                       </button>
                     </div>
                   </div>
@@ -294,24 +297,23 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
           {selectedCategory === 'security' && (
             <div className="settings-card space-y-4">
               <div className="pb-3 border-b border-slate-100">
-                <h3 className="text-sm font-bold text-slate-900">SOC 2 CC6.2 Multi-Factor Session</h3>
-                <p className="text-xs text-slate-500">Cryptographically bound auditor session tokens with automated expiration.</p>
+                <h3 className="text-sm font-bold text-slate-900">Session Security</h3>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-slate-500 block text-[10.5px] uppercase">Session State</span>
-                  <strong className="text-emerald-700 block mt-1 font-semibold">AUTHENTICATED (SOC 2 MFA)</strong>
+                  <span className="text-slate-500 block text-[11px] uppercase font-semibold">Session Status</span>
+                  <strong className="text-emerald-700 block mt-1 font-bold">MFA Authenticated</strong>
                 </div>
 
                 <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-slate-500 block text-[10.5px] uppercase">Session Key Fingerprint</span>
-                  <strong className="text-slate-800 block mt-1 font-semibold truncate">sha256:8f2a...c09e</strong>
+                  <span className="text-slate-500 block text-[11px] uppercase font-semibold">Cryptographic Binding</span>
+                  <strong className="text-slate-800 block mt-1 font-bold font-mono">sha256:8f2a...c09e</strong>
                 </div>
               </div>
 
               <div className="pt-2">
-                <label className="block text-xs font-semibold text-slate-700 font-mono mb-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Active Session Token
                 </label>
                 <div className="flex gap-2">
@@ -324,7 +326,7 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
                   <button
                     type="button"
                     onClick={() => copyToClipboard('acme_audit_session_7f18b9c240fa91176e330ad', 'token')}
-                    className="px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 text-xs font-mono font-medium flex items-center gap-1 cursor-pointer"
+                    className="px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold flex items-center gap-1 cursor-pointer"
                   >
                     {copiedKey === 'token' ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
                     <span>{copiedKey === 'token' ? 'Copied' : 'Copy'}</span>
@@ -338,37 +340,37 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
           {selectedCategory === 'ai' && (
             <div className="settings-card space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <div>
-                  <h3 className="text-sm font-bold text-slate-900">Google Gemini 3.5 Flash-Lite Engine</h3>
-                  <p className="text-xs text-slate-500">Live AI Studio integration via process.env.GEMINI_API_KEY.</p>
-                </div>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <h3 className="text-sm font-bold text-slate-900">Gemini 3.5 Flash-Lite Engine</h3>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
                   <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-                  Live Connected
+                  Connected
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-slate-500 block text-[10px] uppercase">Engine Target</span>
-                  <strong className="text-slate-900 block mt-0.5">gemini-3.5-flash-lite</strong>
+                  <span className="text-slate-500 block text-[11px] uppercase font-semibold">Engine Target</span>
+                  <strong className="text-slate-900 block mt-0.5 font-bold">gemini-3.5-flash-lite</strong>
                 </div>
 
                 <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-slate-500 block text-[10px] uppercase">API Key Status</span>
-                  <strong className="text-emerald-700 block mt-0.5">Configured (39 bytes)</strong>
-                </div>
-
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-slate-500 block text-[10px] uppercase">Latency</span>
-                  <strong className="text-slate-900 block mt-0.5">~340ms (Zero-Rate-Limit Cache)</strong>
-                </div>
-
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
-                  <span className="text-slate-500 block text-[10px] uppercase">SOC 2 Grounding</span>
-                  <strong className="text-emerald-700 block mt-0.5">Deterministic Guardrails Enabled</strong>
+                  <span className="text-slate-500 block text-[11px] uppercase font-semibold">API Key Status</span>
+                  <strong className="text-emerald-700 block mt-0.5 font-bold">Configured</strong>
                 </div>
               </div>
+
+              {/* Technical Details Collapsed Behind Dropdown */}
+              <details className="pt-2 group">
+                <summary className="text-xs text-slate-500 hover:text-slate-800 cursor-pointer select-none flex items-center gap-1 list-none font-semibold">
+                  <ChevronDown size={14} className="group-open:rotate-180 transition-transform" />
+                  <span>View Engine Parameters</span>
+                </summary>
+                <div className="mt-2 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs space-y-1">
+                  <div><strong>Temperature:</strong> 0.1 (Deterministic Guardrails)</div>
+                  <div><strong>Rate Limit Strategy:</strong> Zero-Rate-Limit In-Memory Cache</div>
+                  <div><strong>API Source:</strong> Google AI Studio (`GEMINI_API_KEY`)</div>
+                </div>
+              </details>
             </div>
           )}
 
@@ -376,37 +378,27 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
           {selectedCategory === 'policies' && (
             <div className="settings-card space-y-4">
               <div className="pb-3 border-b border-slate-100">
-                <h3 className="text-sm font-bold text-slate-900">Compliance Baselines & De-provisioning SLA</h3>
-                <p className="text-xs text-slate-500">Configured compliance SLAs mapped to formal regulatory frameworks.</p>
+                <h3 className="text-sm font-bold text-slate-900">Compliance SLA & Policies</h3>
               </div>
 
-              <div className="space-y-3 text-xs">
+              <div className="space-y-2.5 text-xs">
                 <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
-                  <div>
-                    <strong className="text-slate-900 font-semibold block">SOC 2 CC6.2 Mandate</strong>
-                    <span className="text-slate-500 font-mono text-[11px]">Enforce revocation SLA &lt; 24 hours post-termination</span>
-                  </div>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800">
-                    24h SLA Active
+                  <strong className="text-slate-900 font-bold">SOC 2 CC6.2 SLA</strong>
+                  <span className="px-2 py-0.5 rounded text-[10.5px] font-bold bg-emerald-100 text-emerald-800">
+                    &lt; 24h Active
                   </span>
                 </div>
 
                 <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
-                  <div>
-                    <strong className="text-slate-900 font-semibold block">ISO 27001 Annex A.9.2.6</strong>
-                    <span className="text-slate-500 font-mono text-[11px]">Removal or adjustment of access rights upon departure</span>
-                  </div>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800">
+                  <strong className="text-slate-900 font-bold">ISO 27001 Annex A.9.2.6</strong>
+                  <span className="px-2 py-0.5 rounded text-[10.5px] font-bold bg-emerald-100 text-emerald-800">
                     Enforced
                   </span>
                 </div>
 
                 <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
-                  <div>
-                    <strong className="text-slate-900 font-semibold block">Human-in-the-Loop Sign-off Threshold</strong>
-                    <span className="text-slate-500 font-mono text-[11px]">Required for all high-blast-radius SaaS deprovisionings</span>
-                  </div>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-200 text-slate-800">
+                  <strong className="text-slate-900 font-bold">Human-in-the-Loop Threshold</strong>
+                  <span className="px-2 py-0.5 rounded text-[10.5px] font-bold bg-slate-200 text-slate-800">
                     Mandatory (TC4)
                   </span>
                 </div>
