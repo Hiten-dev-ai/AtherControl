@@ -1,17 +1,9 @@
 import React, { useState } from 'react';
 import { 
-  Sparkles, 
   Send, 
-  BrainCircuit, 
-  ShieldAlert, 
-  ShieldCheck, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Clock, 
   Terminal, 
-  FileCheck2, 
-  Cpu, 
-  Flame
+  CheckCircle2, 
+  ChevronRight
 } from 'lucide-react';
 import { AiCopilotService, CopilotResponse } from '../services/aiCopilotService';
 import { DiscrepancyFinding, DeprovisionTicket, Employee, SaaSUser } from '../types/audit';
@@ -35,13 +27,12 @@ export const AiSecurityCopilot: React.FC<AiSecurityCopilotProps> = ({
   leavers,
   findings,
   tickets,
-  users,
-  onNavigateToTab
+  users
 }) => {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [currentResponse, setCurrentResponse] = useState<CopilotResponse | null>(null);
-  const [showThoughtProcess, setShowThoughtProcess] = useState(true);
+  const [showThoughtProcess, setShowThoughtProcess] = useState(false);
 
   // Auto-run first query on mount if empty
   React.useEffect(() => {
@@ -56,7 +47,7 @@ export const AiSecurityCopilot: React.FC<AiSecurityCopilotProps> = ({
     setQuery(queryText);
 
     try {
-      await new Promise(r => setTimeout(r, 250));
+      await new Promise(r => setTimeout(r, 200));
       const res = await AiCopilotService.queryAgent(queryText, { leavers, findings, tickets, users });
       setCurrentResponse(res);
     } finally {
@@ -70,70 +61,50 @@ export const AiSecurityCopilot: React.FC<AiSecurityCopilotProps> = ({
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header Banner with Ruled Editorial Margins */}
-      <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-purple-50 border border-purple-200 grid place-items-center text-purple-700 shrink-0">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-base font-bold text-slate-900 tracking-tight">
-                  AI Security & Compliance Copilot
-                </h2>
-                <span className="px-2 py-0.5 text-[10px] font-mono font-semibold rounded bg-purple-50 text-purple-800 border border-purple-200">
-                  Gemini 3.8 Flash • Agentic Core
-                </span>
-              </div>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Autonomous blast-radius analysis, identity discrepancy synthesis, and SOC 2 / ISO 27001 auditor justifications.
-              </p>
-            </div>
+    <div className="space-y-4">
+      {/* Header & Query Bar */}
+      <div className="bg-white border border-slate-200 rounded-lg p-3.5">
+        <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-slate-100">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
+              AI Security Copilot
+            </h2>
+            <span className="text-[11px] font-mono text-slate-400">
+              (Gemini 3.8 Flash)
+            </span>
           </div>
-
-          <div className="flex items-center gap-2 font-mono text-xs text-slate-600 bg-slate-50 px-3 py-1.5 rounded border border-slate-200">
-            <Cpu className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Autonomous State: <strong className="text-slate-900">Online</strong></span>
-          </div>
+          <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
+            Active Reasoning Engine
+          </span>
         </div>
 
         {/* Query Input Bar */}
-        <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
-          <div className="relative flex-1">
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Ask anything (e.g. 'Marcus Vance blast radius', 'Explain TC3 service bot rules', 'SOC 2 audit status')..."
-              className="w-full bg-white border border-slate-300 rounded-lg pl-4 pr-10 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 font-mono transition-colors"
-            />
-          </div>
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Ask a security query or audit question..."
+            className="flex-1 bg-white border border-slate-300 rounded-md px-3.5 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-900 transition-colors"
+          />
           <button
             type="submit"
             disabled={isLoading || !query.trim()}
-            className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white rounded-lg text-xs font-semibold flex items-center gap-2 transition-colors shrink-0 cursor-pointer"
+            className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white rounded-md text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
           >
-            {isLoading ? (
-              <span className="animate-spin text-sm">⟳</span>
-            ) : (
-              <Send className="w-3.5 h-3.5" />
-            )}
+            {isLoading ? <span className="animate-spin text-xs">⟳</span> : <Send className="w-3 h-3" />}
             <span>Analyze</span>
           </button>
         </form>
 
         {/* Suggested Queries Pills */}
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-mono font-semibold text-slate-500 uppercase tracking-wider">
-            Quick Prompts:
-          </span>
+        <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+          <span className="text-[10px] font-mono text-slate-400 uppercase">Suggested:</span>
           {SUGGESTED_QUERIES.map((sq, idx) => (
             <button
               key={idx}
               onClick={() => handleRunQuery(sq)}
-              className="px-2.5 py-1 text-xs rounded bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:border-slate-300 text-slate-700 font-mono transition-all text-left cursor-pointer"
+              className="px-2 py-0.5 text-[11px] rounded bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-900 transition-colors cursor-pointer"
             >
               {sq}
             </button>
@@ -143,115 +114,96 @@ export const AiSecurityCopilot: React.FC<AiSecurityCopilotProps> = ({
 
       {/* Response Panel */}
       {currentResponse && (
-        <div className="space-y-5 animate-in fade-in duration-200">
-          {/* Executive Summary & Blast Radius Badge */}
-          <div className="bg-white border border-slate-200 rounded-lg p-5 space-y-4 shadow-sm">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3.5">
-              <div className="flex items-center gap-2.5">
-                <BrainCircuit className="w-5 h-5 text-purple-700" />
-                <span className="text-sm font-bold text-slate-900">
-                  Agent Executive Assessment
-                </span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span className="text-xs font-mono text-slate-500">
-                  Engine: <strong className="text-slate-800">{currentResponse.engineUsed}</strong> ({currentResponse.latencyMs}ms)
-                </span>
-
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded border font-mono text-xs font-bold bg-rose-50 text-rose-800 border-rose-300">
-                  <Flame className="w-3.5 h-3.5 text-rose-600" />
-                  <span>BLAST RADIUS: {currentResponse.blastRadiusScore}</span>
-                </div>
-              </div>
-            </div>
-
-            <p className="text-sm text-slate-800 leading-relaxed font-sans">
-              {currentResponse.summary}
-            </p>
-
-            {/* Correlated Evidence Matrix with Ruled Margin Cells */}
+        <div className="bg-white border border-slate-200 rounded-lg p-5 space-y-4">
+          {/* Header */}
+          <div className="flex items-center justify-between pb-3 border-b border-slate-200">
             <div>
-              <h4 className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider font-mono mb-2">
-                Correlated Audit Evidence
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                {currentResponse.evidence.map((ev, i) => {
-                  let badgeStyle = 'bg-slate-50 border-slate-200 text-slate-800';
-                  if (ev.type === 'danger') badgeStyle = 'bg-rose-50 border-rose-200 text-rose-900';
-                  if (ev.type === 'warning') badgeStyle = 'bg-amber-50 border-amber-200 text-amber-900';
-                  if (ev.type === 'success') badgeStyle = 'bg-emerald-50 border-emerald-200 text-emerald-900';
-                  if (ev.type === 'info') badgeStyle = 'bg-blue-50 border-blue-200 text-blue-900';
-
-                  return (
-                    <div key={i} className={`p-3 rounded border ${badgeStyle} text-xs font-mono`}>
-                      <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1 font-semibold">
-                        {ev.label}
-                      </div>
-                      <div className="font-semibold break-words">
-                        {ev.value}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              <span className="text-xs font-semibold text-slate-900">
+                Executive Risk Assessment
+              </span>
+              <span className="text-xs text-slate-400 ml-2 font-mono">
+                ({currentResponse.latencyMs}ms)
+              </span>
             </div>
 
-            {/* Regulatory & Recommended Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              <div className="p-3.5 rounded-lg border border-slate-200 bg-slate-50">
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-800 uppercase tracking-wider font-mono mb-2">
-                  <FileCheck2 className="w-4 h-4 text-blue-700" />
-                  <span>Regulatory Impact</span>
-                </div>
-                <ul className="space-y-1.5 text-xs text-slate-600">
-                  {currentResponse.regulatoryImpact.map((reg, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-blue-700 font-mono mt-0.5">•</span>
-                      <span>{reg}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <span className={`px-2 py-0.5 rounded text-[11px] font-mono font-medium ${
+              currentResponse.blastRadiusScore === 'CRITICAL'
+                ? 'bg-rose-50 text-rose-800 border border-rose-200 font-semibold'
+                : 'bg-amber-50 text-amber-800 border border-amber-200'
+            }`}>
+              Blast Radius: {currentResponse.blastRadiusScore}
+            </span>
+          </div>
 
-              <div className="p-3.5 rounded-lg border border-slate-200 bg-slate-50">
-                <div className="flex items-center gap-2 text-xs font-semibold text-slate-800 uppercase tracking-wider font-mono mb-2">
-                  <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                  <span>Autonomous Remediation Plan</span>
+          <p className="text-xs text-slate-700 leading-relaxed">
+            {currentResponse.summary}
+          </p>
+
+          {/* Evidence Grid */}
+          <div>
+            <h4 className="text-[11px] font-medium text-slate-500 uppercase tracking-wider font-mono mb-2">
+              Correlated Evidence
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {currentResponse.evidence.map((ev, i) => (
+                <div key={i} className="p-2.5 rounded border border-slate-200 bg-slate-50/50 text-xs font-mono">
+                  <div className="text-[10px] text-slate-400 uppercase tracking-wider mb-0.5">
+                    {ev.label}
+                  </div>
+                  <div className="text-slate-900 font-medium break-words">
+                    {ev.value}
+                  </div>
                 </div>
-                <ul className="space-y-1.5 text-xs text-slate-600">
-                  {currentResponse.recommendedActions.map((act, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-emerald-700 font-mono mt-0.5">✓</span>
-                      <span>{act}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Regulatory & Recommended Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+            <div className="p-3 rounded border border-slate-200 bg-slate-50/50">
+              <span className="text-xs font-semibold text-slate-800 block mb-1.5">
+                Regulatory Impact
+              </span>
+              <ul className="space-y-1 text-xs text-slate-600">
+                {currentResponse.regulatoryImpact.map((reg, idx) => (
+                  <li key={idx} className="flex items-start gap-1.5">
+                    <span className="text-slate-400">•</span>
+                    <span>{reg}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="p-3 rounded border border-slate-200 bg-slate-50/50">
+              <span className="text-xs font-semibold text-slate-800 block mb-1.5">
+                Remediation Actions
+              </span>
+              <ul className="space-y-1 text-xs text-slate-600">
+                {currentResponse.recommendedActions.map((act, idx) => (
+                  <li key={idx} className="flex items-start gap-1.5">
+                    <span className="text-slate-400">✓</span>
+                    <span>{act}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
           {/* Collapsible Chain of Thought */}
-          <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
+          <div className="pt-2 border-t border-slate-100">
             <button
               onClick={() => setShowThoughtProcess(!showThoughtProcess)}
-              className="w-full px-5 py-3 flex items-center justify-between text-xs font-mono font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="text-xs text-slate-500 hover:text-slate-800 font-mono flex items-center gap-1 cursor-pointer"
             >
-              <div className="flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-slate-700" />
-                <span>Agent Deep Chain-of-Thought Trace ({currentResponse.thoughtProcess.length} Reasoning Steps)</span>
-              </div>
-              <span className="text-[11px] text-slate-500">
-                {showThoughtProcess ? '[Collapse Trace]' : '[Expand Trace]'}
-              </span>
+              <span>{showThoughtProcess ? '▼ Hide' : '▶ Show'} reasoning trace ({currentResponse.thoughtProcess.length} steps)</span>
             </button>
 
             {showThoughtProcess && (
-              <div className="px-5 pb-4 pt-1 border-t border-slate-200 space-y-2">
+              <div className="mt-2.5 space-y-1.5 pl-2 border-l border-slate-200">
                 {currentResponse.thoughtProcess.map((step, idx) => (
-                  <div key={idx} className="flex items-start gap-2.5 text-xs font-mono text-slate-800 bg-slate-50 p-2.5 rounded border border-slate-200">
-                    <span className="text-slate-900 font-bold shrink-0">{String(idx + 1).padStart(2, '0')}.</span>
-                    <span className="leading-relaxed">{step}</span>
+                  <div key={idx} className="text-xs font-mono text-slate-600">
+                    <span className="text-slate-400 mr-1.5">0{idx + 1}.</span>
+                    <span>{step}</span>
                   </div>
                 ))}
               </div>

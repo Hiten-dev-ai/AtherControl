@@ -72,7 +72,7 @@ export const App: React.FC = () => {
   const postLoginCount = agentState.findings.filter(f => f.hasPostDepartureLogin && f.status === 'UNAUTHORIZED_ACTIVE').length;
 
   return (
-    <div className="min-h-screen bg-slate-100/70 text-slate-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
       <Navbar
         agentState={agentState}
         onRunAudit={handleRunAudit}
@@ -81,74 +81,51 @@ export const App: React.FC = () => {
         setActiveTab={setActiveTab}
       />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
-        {/* Ruling Margin KPI Summary Grid */}
-        <div className="bg-white border border-slate-200 rounded-lg overflow-hidden grid grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200 shadow-sm">
-          <div className="p-4 flex items-center justify-between">
-            <div>
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider font-mono">
-                HR Leavers Tracked
-              </span>
-              <div className="text-2xl font-bold font-mono text-slate-900 mt-0.5">
-                {agentState.leavers.length}
-              </div>
-              <span className="text-[11px] text-slate-600 font-mono">
-                100% Identity Resolved
-              </span>
-            </div>
-            <div className="w-9 h-9 rounded-md bg-slate-100 border border-slate-200 grid place-items-center text-slate-700 shrink-0">
-              <UserX className="w-4 h-4" />
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 space-y-4">
+        {/* Ruled Minimalist Metric Grid */}
+        <div className="bg-white border border-slate-200 rounded-md grid grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
+          <div className="px-4 py-2.5">
+            <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider font-mono">
+              HR Leavers
+            </span>
+            <div className="text-lg font-semibold font-mono text-slate-900 mt-0.5">
+              {agentState.leavers.length}
             </div>
           </div>
 
-          <div className="p-4 flex items-center justify-between">
-            <div>
-              <span className="text-[11px] font-semibold text-rose-700 uppercase tracking-wider font-mono">
+          <div className="px-4 py-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider font-mono">
                 Active Violations
               </span>
-              <div className="text-2xl font-bold font-mono text-rose-700 mt-0.5">
-                {agentState.findings.filter(f => f.status === 'UNAUTHORIZED_ACTIVE').length}
-              </div>
-              <span className="text-[11px] text-rose-600 font-mono">
-                {postLoginCount} Post-Exit Logins (TC1)
-              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
             </div>
-            <div className="w-9 h-9 rounded-md bg-rose-50 border border-rose-200 grid place-items-center text-rose-700 shrink-0">
-              <ShieldAlert className="w-4 h-4" />
+            <div className="text-lg font-semibold font-mono text-rose-600 mt-0.5">
+              {agentState.findings.filter(f => f.status === 'UNAUTHORIZED_ACTIVE').length}
             </div>
           </div>
 
-          <div className="p-4 flex items-center justify-between">
-            <div>
-              <span className="text-[11px] font-semibold text-amber-700 uppercase tracking-wider font-mono">
-                Pending HITL Gate
+          <div className="px-4 py-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider font-mono">
+                Pending Approvals
               </span>
-              <div className="text-2xl font-bold font-mono text-amber-700 mt-0.5">
-                {pendingCount}
-              </div>
-              <span className="text-[11px] text-amber-600 font-mono">
-                Awaiting Sign-off (TC4)
-              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
             </div>
-            <div className="w-9 h-9 rounded-md bg-amber-50 border border-amber-200 grid place-items-center text-amber-700 shrink-0">
-              <Clock className="w-4 h-4" />
+            <div className="text-lg font-semibold font-mono text-slate-900 mt-0.5">
+              {pendingCount}
             </div>
           </div>
 
-          <div className="p-4 flex items-center justify-between">
-            <div>
-              <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-wider font-mono">
+          <div className="px-4 py-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider font-mono">
                 Remediated & Verified
               </span>
-              <div className="text-2xl font-bold font-mono text-emerald-700 mt-0.5">
-                {verifiedCount}
-              </div>
-              <span className="text-[11px] text-emerald-600 font-mono">
-                SOC 2 Compliant
-              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             </div>
-            <div className="w-9 h-9 rounded-md bg-emerald-50 border border-emerald-200 grid place-items-center text-emerald-700 shrink-0">
-              <CheckCircle2 className="w-4 h-4" />
+            <div className="text-lg font-semibold font-mono text-emerald-600 mt-0.5">
+              {verifiedCount}
             </div>
           </div>
         </div>

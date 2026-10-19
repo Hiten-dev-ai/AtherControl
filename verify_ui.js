@@ -34,7 +34,7 @@ async function verify() {
   // Tab: AI Copilot & Risk Brain
   await page.evaluate(() => {
     const tabs = Array.from(document.querySelectorAll('button'));
-    const copilotTab = tabs.find(b => b.innerText.includes('AI Copilot'));
+    const copilotTab = tabs.find(b => b.innerText.includes('AI Security Copilot'));
     if (copilotTab) copilotTab.click();
   });
   await new Promise(r => setTimeout(r, 800));
@@ -59,19 +59,19 @@ async function verify() {
   await new Promise(r => setTimeout(r, 600));
   await page.screenshot({ path: './ui_hitl.png' });
 
-  // Tab 5: TC1-TC4 Test Suite
+  // Tab 5: Test Suite
   await page.evaluate(() => {
     const tabs = Array.from(document.querySelectorAll('button'));
-    const testTab = tabs.find(b => b.innerText.includes('TC1–TC4 Test Suite'));
+    const testTab = tabs.find(b => b.innerText.includes('Test Suite'));
     if (testTab) testTab.click();
   });
   await new Promise(r => setTimeout(r, 600));
   await page.screenshot({ path: './ui_tests.png' });
 
-  // Tab 6: Compliance Audit Report
+  // Tab 6: Compliance Report
   await page.evaluate(() => {
     const tabs = Array.from(document.querySelectorAll('button'));
-    const repTab = tabs.find(b => b.innerText.includes('Compliance Audit Report'));
+    const repTab = tabs.find(b => b.innerText.includes('Compliance Report'));
     if (repTab) repTab.click();
   });
   await new Promise(r => setTimeout(r, 600));
