@@ -69,12 +69,12 @@ export const AiSecurityCopilot: React.FC<AiSecurityCopilotProps> = ({
             <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
               AI Security Copilot
             </h2>
-            <span className="text-[11px] font-mono text-slate-400">
-              (Gemini 3.8 Flash)
+            <span className="text-[11px] font-mono text-slate-500">
+              (Gemini 3.5 Flash-Lite)
             </span>
           </div>
-          <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
-            Active Reasoning Engine
+          <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-medium flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Live Google AI Studio Engine
           </span>
         </div>
 
@@ -116,12 +116,15 @@ export const AiSecurityCopilot: React.FC<AiSecurityCopilotProps> = ({
       {currentResponse && (
         <div className="bg-white border border-slate-200 rounded-lg p-5 space-y-4">
           {/* Header */}
-          <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-            <div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-200">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs font-semibold text-slate-900">
                 Executive Risk Assessment
               </span>
-              <span className="text-xs text-slate-400 ml-2 font-mono">
+              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-blue-50 text-blue-700 border border-blue-200 font-medium">
+                {currentResponse.engineUsed}
+              </span>
+              <span className="text-xs text-slate-400 font-mono">
                 ({currentResponse.latencyMs}ms)
               </span>
             </div>

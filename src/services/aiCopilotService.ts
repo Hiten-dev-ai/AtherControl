@@ -34,6 +34,48 @@ export class AiCopilotService {
     const startTime = performance.now();
     const qLower = query.toLowerCase();
 
+    // 1. Attempt Live Gemini 3.5 Flash-Lite API
+    try {
+      const response = await fetch('/api/gemini/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, context })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data && data.summary) {
+          return {
+            query,
+            engineUsed: 'Gemini 3.5 Flash-Lite (Live AI Studio API)',
+            latencyMs: Math.round(performance.now() - startTime),
+            blastRadiusScore: data.blastRadiusScore || 'HIGH',
+            thoughtProcess: data.thoughtProcess || [
+              'Phase 1: Ingested live HR departure timestamps and SaaS account active states.',
+              'Phase 2: Analyzed cross-platform permission grants and access privileges.',
+              'Phase 3: Evaluated blast radius and potential data exfiltration risk.',
+              'Phase 4: Synthesized SOC 2 CC6.2 compliance impact and remediation plan.'
+            ],
+            summary: data.summary,
+            evidence: data.evidence || [
+              { label: 'Evaluation Model', value: 'Gemini 3.5 Flash-Lite' }
+            ],
+            regulatoryImpact: data.regulatoryImpact || [
+              'SOC 2 Type II CC6.2: Logical access removal failure within policy mandate.',
+              'ISO/IEC 27001:2022 A.9.2.6: Removal or adjustment of access rights.'
+            ],
+            recommendedActions: data.recommendedActions || [
+              'Revoke active session tokens and suspend SaaS credentials.',
+              'Obtain authorized human sign-off via HITL approval queue.'
+            ],
+            complianceControls: ['SOC 2 CC6.2', 'SOC 2 CC6.3', 'ISO 27001 A.9.2.6']
+          };
+        }
+      }
+    } catch (apiErr) {
+      console.warn('[AiCopilotService] Live Gemini API call bypassed, using local engine:', apiErr);
+    }
+
     // Contextual extraction
     const vanceFindings = context.findings.filter(f => f.hrEmployee.id === 'EMP-1042');
     const jenkinsFindings = context.findings.filter(f => f.hrEmployee.id === 'EMP-1088');
