@@ -68,6 +68,15 @@ async function verify() {
   await new Promise(r => setTimeout(r, 600));
   await page.screenshot({ path: './ui_tests.png' });
 
+  // Tab 6: Compliance Audit Report
+  await page.evaluate(() => {
+    const tabs = Array.from(document.querySelectorAll('button'));
+    const repTab = tabs.find(b => b.innerText.includes('Compliance Audit Report'));
+    if (repTab) repTab.click();
+  });
+  await new Promise(r => setTimeout(r, 600));
+  await page.screenshot({ path: './ui_report.png' });
+
   // Get DOM text
   const bodyText = await page.evaluate(() => document.body.innerText);
   console.log('--- BODY TEXT PREVIEW ---');
