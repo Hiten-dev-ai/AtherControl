@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { LoginPage } from './components/LoginPage';
-import { TutorialGuide } from './components/TutorialGuide';
+import { SpotlightTour } from './components/SpotlightTour';
 import { AgentExecutionStream } from './components/AgentExecutionStream';
 import { DiscrepancyTable } from './components/DiscrepancyTable';
 import { HITLApprovalQueue } from './components/HITLApprovalQueue';
@@ -35,7 +35,7 @@ export const App: React.FC = () => {
     email: 'hiten.dev.ai@gmail.com',
     role: 'Lead Information Security Auditor'
   });
-  const [tutorialOpen, setTutorialOpen] = useState<boolean>(true);
+  const [tutorialOpen, setTutorialOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('agent');
   
   const agentRef = useRef<AuditAgent | null>(null);
@@ -109,17 +109,16 @@ export const App: React.FC = () => {
 
       {/* Main Content Pane */}
       <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
-        <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-6 space-y-4">
-          {/* Interactive Tutorial Guide Walkthrough (Dismissible) */}
-          {tutorialOpen && (
-            <TutorialGuide
-              onNavigateToTab={(tabId) => setActiveTab(tabId)}
-              onClose={() => setTutorialOpen(false)}
-            />
-          )}
+        <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-5 space-y-4">
+          {/* Spotlight Interactive Tour (Non-cluttering overlay) */}
+          <SpotlightTour
+            isOpen={tutorialOpen}
+            onClose={() => setTutorialOpen(false)}
+            onSelectTab={(t) => setActiveTab(t)}
+          />
 
           {/* Minimalist Ruled Metric Strip */}
-          <div className="bg-white border border-slate-200 rounded-md grid grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
+          <div data-tour="metrics" className="bg-white border border-slate-200 rounded-md grid grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
             <div className="px-4 py-2.5">
               <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider font-mono">
                 HR Leavers

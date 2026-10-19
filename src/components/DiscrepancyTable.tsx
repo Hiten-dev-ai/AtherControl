@@ -52,7 +52,7 @@ export const DiscrepancyTable: React.FC<DiscrepancyTableProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div data-tour="matrix" className="space-y-4">
       {/* Header & Filter Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200">
         <h2 className="text-sm font-semibold text-slate-900 tracking-tight">

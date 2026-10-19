@@ -24,7 +24,7 @@ export const TestCasesRunner: React.FC = () => {
   const allPassed = results.every(r => r.passed);
 
   return (
-    <div className="space-y-4">
+    <div data-tour="tests" className="space-y-4">
       {/* Header & Run Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200">
         <div className="flex items-center gap-2">

@@ -22,7 +22,7 @@ export const AgentExecutionStream: React.FC<AgentExecutionStreamProps> = ({
   onNavigateToApprovals
 }) => {
   return (
-    <div className="space-y-4">
+    <div data-tour="stream" className="space-y-4">
       {/* Header Info */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200">
         <h2 className="text-sm font-semibold text-slate-900 tracking-tight">

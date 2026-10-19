@@ -54,64 +54,33 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col h-screen shrink-0 sticky top-0 select-none">
+    <aside data-tour="sidebar" className="w-64 bg-white border-r border-slate-200 flex flex-col h-screen shrink-0 sticky top-0 select-none">
       {/* Brand Header */}
-      <div className="p-4 border-b border-slate-200">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-slate-900 grid place-items-center text-white shrink-0 shadow-sm">
-            <Shield className="w-4 h-4 text-white" />
-          </div>
-          <div className="min-w-0">
-            <h1 className="text-xs font-bold text-slate-900 truncate tracking-tight">
-              Leaver Access Auditor
-            </h1>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span className="text-[10px] font-mono text-slate-500 truncate">
-                SOC 2 / ISO 27001
+      <div className="p-3.5 border-b border-slate-200">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="w-7 h-7 rounded-md bg-slate-900 grid place-items-center text-white shrink-0">
+              <Shield className="w-3.5 h-3.5 text-white" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-xs font-semibold text-slate-900 truncate tracking-tight">
+                Leaver Access Auditor
+              </h1>
+              <span className="text-[10px] font-mono text-slate-400 block truncate">
+                SOC 2 • Gemini 3.5 Flash-Lite
               </span>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Model & System Status Pill */}
-      <div className="px-3 pt-3">
-        <div className="rounded-md border border-slate-200 bg-slate-50/70 p-2.5 text-xs font-mono">
-          <div className="flex items-center justify-between text-[10px] text-slate-500 uppercase tracking-wider mb-1">
-            <span>Model Engine</span>
-            <span className="text-emerald-700 font-semibold flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Active
-            </span>
-          </div>
-          <div className="font-semibold text-slate-800 text-[11px] truncate flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-blue-600 shrink-0" />
-            <span>Gemini 3.5 Flash-Lite</span>
-          </div>
+          <button
+            type="button"
+            onClick={() => setTutorialOpen(true)}
+            className="p-1 rounded text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors cursor-pointer"
+            title="Start Interactive Tour"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+          </button>
         </div>
-      </div>
-
-      {/* Guided Tutorial Mode Button */}
-      <div className="px-3 pt-2">
-        <button
-          type="button"
-          onClick={() => setTutorialOpen(!tutorialOpen)}
-          className={`w-full flex items-center justify-between px-3 py-1.5 rounded-md text-xs font-medium border transition-colors cursor-pointer ${
-            tutorialOpen
-              ? 'bg-blue-50 border-blue-200 text-blue-900 font-semibold'
-              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            <BookOpen className="w-3.5 h-3.5 text-blue-600" />
-            <span>Interactive Tutorial</span>
-          </div>
-          <span className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
-            tutorialOpen ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'
-          }`}>
-            {tutorialOpen ? 'Active' : 'Open'}
-          </span>
-        </button>
       </div>
 
       {/* Main Navigation Items */}
