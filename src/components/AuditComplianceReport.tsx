@@ -4,7 +4,8 @@ import {
   Printer, 
   ChevronDown
 } from 'lucide-react';
-import { DiscrepancyFinding, Employee, SaaSUser, AuditAgentState } from '../types/audit';
+import { DiscrepancyFinding, Employee, SaaSUser } from '../types/audit';
+import { AuditAgentState } from '../services/auditAgent';
 
 interface AuditComplianceReportProps {
   agentState?: AuditAgentState;
@@ -20,13 +21,13 @@ export const AuditComplianceReport: React.FC<AuditComplianceReportProps> = ({
   leavers: propLeavers,
   users: propUsers
 }) => {
-  const findings = agentState?.findings || propFindings || [];
-  const leavers = agentState?.leavers || propLeavers || [];
-  const users = agentState?.mockUsers || propUsers || [];
+  const findings: DiscrepancyFinding[] = agentState?.findings || propFindings || [];
+  const leavers: Employee[] = agentState?.leavers || propLeavers || [];
+  const users: SaaSUser[] = agentState?.saasUsers || propUsers || [];
 
-  const unauthorizedTotal = findings.filter(f => f.status === 'UNAUTHORIZED_ACTIVE').length;
-  const remediatedTotal = findings.filter(f => f.status === 'DEPROVISIONED').length;
-  const postLoginCount = findings.filter(f => f.hasPostDepartureLogin).length;
+  const unauthorizedTotal = findings.filter((f: DiscrepancyFinding) => f.status === 'UNAUTHORIZED_ACTIVE').length;
+  const remediatedTotal = findings.filter((f: DiscrepancyFinding) => f.status === 'DEPROVISIONED').length;
+  const postLoginCount = findings.filter((f: DiscrepancyFinding) => f.hasPostDepartureLogin).length;
 
   const handlePrint = () => {
     window.print();
@@ -172,7 +173,7 @@ export const AuditComplianceReport: React.FC<AuditComplianceReportProps> = ({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-sans">
-              {findings.map(f => (
+              {findings.map((f: DiscrepancyFinding) => (
                 <tr key={f.id} className="hover:bg-slate-50/70">
                   <td className="px-3.5 py-2.5">
                     <div className="font-bold text-slate-900">{f.hrEmployee.fullName}</div>

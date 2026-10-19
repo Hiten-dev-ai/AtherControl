@@ -190,7 +190,7 @@ export const HITLApprovalQueue: React.FC<HITLApprovalQueueProps> = ({
                     <span className="text-slate-500">({ticket.targetPlatform})</span>
                   </div>
                   <div className="text-[11px] text-slate-500 mt-0.5">
-                    Sign-off: {ticket.approverName || 'Hiten S'} at {ticket.approvedAt || 'Just now'}
+                    Sign-off: {ticket.approver || 'Hiten S'} at {ticket.approvedAt || 'Just now'}
                   </div>
                 </div>
 

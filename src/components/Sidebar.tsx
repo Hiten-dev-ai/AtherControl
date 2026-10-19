@@ -63,7 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <Shield className="w-5 h-5 text-emerald-400" />
         </div>
         <div className="sidebar-brand-copy">
-          <strong>AtherPanel</strong>
+          <strong>AtherControl</strong>
           <small>LEAVER ACCESS REVIEW</small>
         </div>
       </div>

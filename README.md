@@ -1,4 +1,4 @@
-# Leaver Access Review Auditor 🛡️
+# AtherControl · Leaver Access Review Auditor 🛡️
 > **Autonomous Agentic AI for SaaS Identity Reconciliation, Human-Gated Deprovisioning & Access Verification**  
 > **Event:** Ziro Digital National Agentic AI Hackathon 2026  
 > **Participant:** Hiten S (*R.M.K College of Engineering and Technology*)  
@@ -11,7 +11,7 @@
 ## 🎯 Executive Overview
 When employees leave an organization, orphaned SaaS access accounts create severe data breach vectors and audit non-compliance under **SOC 2 Type II (CC6.2 & CC6.3)** and **ISO/IEC 27001:2022 (Control A.9.2.6)**. Manual IT reviews struggle with fragmented identities, legal surname changes, and shared service accounts.
 
-The **Leaver Access Review Auditor** is an autonomous AI agent system that continuously ingests HR separation data, correlates identities across enterprise SaaS consoles (Google Workspace, GitHub Enterprise, AWS IAM, Slack Enterprise Grid), flags unauthorized access, enforces a strict **Human-in-the-Loop (HITL)** approval gate for deprovisioning, and autonomously re-queries consoles to verify revocation.
+**AtherControl** is an autonomous AI agent system that continuously ingests HR separation data, correlates identities across enterprise SaaS consoles (Google Workspace, GitHub Enterprise, AWS IAM, Slack Enterprise Grid), flags unauthorized access, enforces a strict **Human-in-the-Loop (HITL)** approval gate for deprovisioning, and autonomously re-queries consoles to verify revocation.
 
 ---
 

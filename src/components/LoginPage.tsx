@@ -77,14 +77,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           <div className="w-12 h-12 rounded-xl bg-slate-900 grid place-items-center text-white shadow-xs">
             <Shield className="w-6 h-6 text-emerald-400" />
           </div>
-          <span className="text-[10.5px] font-mono font-bold tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-            ATHERPANEL 1:1
+          <span className="text-[10.5px] font-bold tracking-wider text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+            ATHERCONTROL
           </span>
         </div>
 
         <div>
-          <span className="text-[10px] font-mono font-bold tracking-widest text-emerald-700 uppercase block">
-            ATHERGRID SECURITY
+          <span className="text-[10px] font-bold tracking-widest text-emerald-700 uppercase block">
+            ATHERCONTROL SECURITY
           </span>
           <h1 className="text-2xl font-bold tracking-tight text-[#18252e] mt-0.5">
             Welcome back.

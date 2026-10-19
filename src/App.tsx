@@ -13,7 +13,6 @@ import {
   Terminal, 
   Activity,
   Search,
-  Settings as SettingsIcon,
   BookOpen
 } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
@@ -212,8 +211,11 @@ export const App: React.FC = () => {
 
               {activeTab === 'copilot' && (
                 <AiSecurityCopilot
-                  agentState={agentState}
-                  onSelectTicket={() => setActiveTab('hitl')}
+                  leavers={agentState.leavers}
+                  findings={agentState.findings}
+                  tickets={agentState.tickets}
+                  users={agentState.saasUsers}
+                  onNavigateToTab={(tab) => setActiveTab(tab)}
                 />
               )}
 
@@ -234,8 +236,7 @@ export const App: React.FC = () => {
 
               {activeTab === 'consoles' && (
                 <MockConsolesViewer
-                  mockUsers={agentState.mockUsers}
-                  onReset={handleReset}
+                  users={agentState.saasUsers}
                 />
               )}
 

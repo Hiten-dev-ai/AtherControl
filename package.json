@@ -1,7 +1,7 @@
 {
-  "name": "leaver-access-review-auditor",
+  "name": "athercontrol",
   "version": "1.0.0",
-  "description": "Autonomous Agentic AI for SaaS Leaver Access Review & Deprovisioning Audit",
+  "description": "AtherControl · Autonomous Agentic AI for SaaS Leaver Access Review & Deprovisioning Audit",
   "type": "module",
   "scripts": {
     "dev": "vite",
