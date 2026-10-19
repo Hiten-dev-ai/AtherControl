@@ -1,10 +1,10 @@
 import React from 'react';
 import { 
   CheckCircle2, 
-  CircleDashed, 
   Clock, 
   AlertTriangle, 
-  ArrowRight
+  ArrowRight,
+  ChevronDown
 } from 'lucide-react';
 import { AgentStepTrace } from '../types/audit';
 
@@ -25,24 +25,29 @@ export const AgentExecutionStream: React.FC<AgentExecutionStreamProps> = ({
     <div data-tour="stream" className="space-y-4">
       {/* Header Info */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200">
-        <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
-          Audit Execution
-        </h2>
+        <div>
+          <h2 className="text-sm font-bold text-slate-900 tracking-tight">
+            Agent Execution Pipeline
+          </h2>
+          <p className="text-xs text-slate-500 font-mono">
+            6-phase state machine with automated policy gates & HITL authorization
+          </p>
+        </div>
 
         {isWaitingApproval && (
           <button
             type="button"
             onClick={onNavigateToApprovals}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-slate-900 text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-600 text-white hover:bg-amber-700 transition-colors shadow-xs cursor-pointer"
           >
-            <span>Review Pending Approvals</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span>Review Pending Approvals (TC4)</span>
+            <ArrowRight size={14} />
           </button>
         )}
       </div>
 
       {/* Stepper with Ruled Vertical Margin Guide */}
-      <div className="relative pl-4 space-y-2 before:content-[''] before:absolute before:left-1.5 before:top-2 before:bottom-2 before:w-px before:bg-slate-200">
+      <div className="space-y-2.5">
         {steps.map((step, idx) => {
           const isActive = step.status === 'IN_PROGRESS';
           const isComplete = step.status === 'COMPLETED';
@@ -51,38 +56,38 @@ export const AgentExecutionStream: React.FC<AgentExecutionStreamProps> = ({
           return (
             <div
               key={step.step}
-              className={`rounded-md border p-2.5 transition-colors ${
+              className={`rounded-xl border p-3.5 transition-all ${
                 isActive
-                  ? 'border-slate-900 bg-white ring-1 ring-slate-900'
+                  ? 'border-emerald-600 bg-white ring-1 ring-emerald-600 shadow-xs'
                   : isWaiting
-                  ? 'border-amber-300 bg-amber-50/40'
+                  ? 'border-amber-300 bg-amber-50/40 shadow-xs'
                   : isComplete
                   ? 'border-slate-200 bg-white'
                   : 'border-slate-200 bg-slate-50/50 opacity-60'
               }`}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <span className="font-mono text-xs font-semibold text-slate-500">
-                    0{idx + 1}.
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs font-bold text-slate-400">
+                    0{idx + 1}
                   </span>
-                  <h3 className="text-xs font-semibold text-slate-900">
+                  <h3 className="text-xs font-bold text-slate-900">
                     {step.label}
                   </h3>
 
                   {isComplete && (
-                    <span className="text-[11px] font-mono text-emerald-700 flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Done
+                    <span className="text-[11px] font-mono text-emerald-800 font-semibold flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      <CheckCircle2 size={12} className="text-emerald-600" /> Completed
                     </span>
                   )}
                   {isActive && (
-                    <span className="text-[11px] font-mono text-blue-700 flex items-center gap-1">
-                      <Clock className="w-3 h-3 animate-spin text-blue-600" /> Running
+                    <span className="text-[11px] font-mono text-emerald-800 font-semibold flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                      <Clock size={12} className="animate-spin text-emerald-600" /> Running
                     </span>
                   )}
                   {isWaiting && (
-                    <span className="text-[11px] font-mono text-amber-800 font-medium flex items-center gap-1">
-                      <AlertTriangle className="w-3 h-3 text-amber-600" /> Pending Sign-off
+                    <span className="text-[11px] font-mono text-amber-900 font-semibold flex items-center gap-1 bg-amber-100 px-2 py-0.5 rounded border border-amber-300">
+                      <AlertTriangle size={12} className="text-amber-700" /> Pending Sign-off (TC4)
                     </span>
                   )}
                 </div>
@@ -94,22 +99,28 @@ export const AgentExecutionStream: React.FC<AgentExecutionStreamProps> = ({
                 )}
               </div>
 
-              {/* Execution Logs */}
+              {/* Collapsed Logs Behind Clean Dropdown */}
               {step.logItems.length > 0 && (
-                <div className="mt-2.5 pt-2 border-t border-slate-100 font-mono text-xs space-y-1 text-slate-600">
-                  {step.logItems.map((log, lIdx) => (
-                    <div 
-                      key={lIdx} 
-                      className={`leading-relaxed ${
-                        log.includes('PAUSED') ? 'text-amber-900 font-semibold bg-amber-50 p-1.5 rounded border border-amber-200' :
-                        log.startsWith('[TC') ? 'text-slate-900 font-medium' :
-                        'text-slate-600'
-                      }`}
-                    >
-                      {log}
-                    </div>
-                  ))}
-                </div>
+                <details className="mt-2.5 pt-2 border-t border-slate-100 group">
+                  <summary className="text-[11px] font-mono text-slate-500 hover:text-slate-900 cursor-pointer select-none flex items-center gap-1.5 list-none">
+                    <ChevronDown size={14} className="text-slate-400 group-open:rotate-180 transition-transform" />
+                    <span>View Execution Logs & Payload ({step.logItems.length} lines)</span>
+                  </summary>
+                  <div className="mt-2 font-mono text-[11px] space-y-1 text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                    {step.logItems.map((log, lIdx) => (
+                      <div 
+                        key={lIdx} 
+                        className={`leading-relaxed ${
+                          log.includes('PAUSED') ? 'text-amber-900 font-semibold bg-amber-100/60 p-1.5 rounded border border-amber-200' :
+                          log.startsWith('[TC') ? 'text-slate-900 font-semibold' :
+                          'text-slate-600'
+                        }`}
+                      >
+                        {log}
+                      </div>
+                    ))}
+                  </div>
+                </details>
               )}
             </div>
           );

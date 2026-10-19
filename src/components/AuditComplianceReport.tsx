@@ -1,23 +1,29 @@
 import React from 'react';
 import { 
-  FileCheck, 
   Download, 
   Printer, 
-  CheckCircle2
+  ChevronDown
 } from 'lucide-react';
-import { DiscrepancyFinding, Employee, SaaSUser } from '../types/audit';
+import { DiscrepancyFinding, Employee, SaaSUser, AuditAgentState } from '../types/audit';
 
 interface AuditComplianceReportProps {
-  findings: DiscrepancyFinding[];
-  leavers: Employee[];
-  users: SaaSUser[];
+  agentState?: AuditAgentState;
+  findings?: DiscrepancyFinding[];
+  leavers?: Employee[];
+  users?: SaaSUser[];
+  onNavigateTab?: (tab: string) => void;
 }
 
 export const AuditComplianceReport: React.FC<AuditComplianceReportProps> = ({
-  findings,
-  leavers,
-  users
+  agentState,
+  findings: propFindings,
+  leavers: propLeavers,
+  users: propUsers
 }) => {
+  const findings = agentState?.findings || propFindings || [];
+  const leavers = agentState?.leavers || propLeavers || [];
+  const users = agentState?.mockUsers || propUsers || [];
+
   const unauthorizedTotal = findings.filter(f => f.status === 'UNAUTHORIZED_ACTIVE').length;
   const remediatedTotal = findings.filter(f => f.status === 'DEPROVISIONED').length;
   const postLoginCount = findings.filter(f => f.hasPostDepartureLogin).length;
@@ -62,122 +68,133 @@ export const AuditComplianceReport: React.FC<AuditComplianceReportProps> = ({
     <div className="space-y-4">
       {/* Action Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200">
-        <h2 className="text-sm font-semibold text-slate-900 tracking-tight">
-          SOC 2 / ISO 27001 Access Review Report
-        </h2>
+        <div>
+          <h2 className="text-sm font-bold text-slate-900 tracking-tight">
+            SOC 2 / ISO 27001 Compliance Certification
+          </h2>
+          <p className="text-xs text-slate-500 font-mono">
+            Formal audit report with cryptographic integrity verification
+          </p>
+        </div>
 
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={handleDownloadJSON}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors shadow-xs cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download size={14} />
             <span>Export JSON</span>
           </button>
           <button
             type="button"
             onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-slate-900 text-white hover:bg-slate-800 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-colors shadow-xs cursor-pointer"
           >
-            <Printer className="w-3.5 h-3.5" />
+            <Printer size={14} />
             <span>Print PDF</span>
           </button>
         </div>
       </div>
 
       {/* Formal Audit Document Container */}
-      <div className="rounded-lg border border-slate-200 bg-white p-6 space-y-5 font-sans">
+      <div className="rounded-xl border border-slate-200 bg-white p-6 space-y-5 font-sans shadow-xs">
         {/* Document Header */}
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-slate-200">
           <div>
-            <span className="text-[10px] font-mono font-medium text-slate-500 uppercase tracking-widest block mb-1">
-              Ref: AUD-2026-OCT-ZIR-01 • SOC 2 CC6.2 / ISO 27001 A.9.2.6
+            <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 tracking-wider uppercase block mb-1.5 w-fit">
+              REF: AUD-2026-OCT-ZIR-01 • SOC 2 CC6.2
             </span>
             <h1 className="text-base font-bold text-slate-900">
               Quarterly SaaS Access Review & Deprovisioning Certification
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5 font-mono">
-              AcmeCorp Inc. Information Security Audit Docket
+            <p className="text-xs text-slate-500 font-mono mt-0.5">
+              AcmeCorp Information Security Audit Docket
             </p>
           </div>
 
           <div className="text-right font-mono text-xs text-slate-500 shrink-0">
             <div>Date: 19 October 2026</div>
-            <div className="text-emerald-700 font-medium mt-0.5">Status: Verified Compliant</div>
+            <div className="text-emerald-700 font-bold mt-0.5">Status: Verified Compliant</div>
           </div>
         </div>
 
         {/* Quantitative Metrics Grid */}
-        <div className="bg-slate-50 border border-slate-200 rounded-md grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
-          <div className="p-3">
-            <span className="text-[10px] font-mono text-slate-500 uppercase">HR Leavers Audited</span>
-            <div className="text-lg font-semibold text-slate-900 font-mono mt-0.5">{leavers.length}</div>
+        <div className="bg-slate-50 border border-slate-200 rounded-xl grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
+          <div className="p-3.5">
+            <span className="text-[10px] font-mono text-slate-500 uppercase font-bold">HR Leavers Audited</span>
+            <div className="text-xl font-bold text-slate-900 font-mono mt-0.5">{leavers.length}</div>
           </div>
 
-          <div className="p-3">
-            <span className="text-[10px] font-mono text-slate-500 uppercase">SaaS Accounts Scanned</span>
-            <div className="text-lg font-semibold text-slate-900 font-mono mt-0.5">{users.length}</div>
+          <div className="p-3.5">
+            <span className="text-[10px] font-mono text-slate-500 uppercase font-bold">SaaS Accounts Scanned</span>
+            <div className="text-xl font-bold text-slate-900 font-mono mt-0.5">{users.length}</div>
           </div>
 
-          <div className="p-3">
-            <span className="text-[10px] font-mono text-slate-500 uppercase">Active Violations</span>
-            <div className="text-lg font-semibold text-rose-700 font-mono mt-0.5">{unauthorizedTotal}</div>
+          <div className="p-3.5">
+            <span className="text-[10px] font-mono text-slate-500 uppercase font-bold">Active Violations</span>
+            <div className="text-xl font-bold text-rose-700 font-mono mt-0.5">{unauthorizedTotal}</div>
           </div>
 
-          <div className="p-3">
-            <span className="text-[10px] font-mono text-slate-500 uppercase">Verified Revoked</span>
-            <div className="text-lg font-semibold text-emerald-700 font-mono mt-0.5">{remediatedTotal}</div>
+          <div className="p-3.5">
+            <span className="text-[10px] font-mono text-slate-500 uppercase font-bold">Verified Revoked</span>
+            <div className="text-xl font-bold text-emerald-700 font-mono mt-0.5">{remediatedTotal}</div>
           </div>
         </div>
 
-        {/* Scope Notes */}
-        <div className="text-xs text-slate-600 space-y-1">
-          <p>
-            <strong className="text-slate-800">Scope:</strong> All separated employee accounts across Google Workspace, GitHub Enterprise, AWS IAM, and Slack Grid were evaluated.
-          </p>
-          <p>
-            <strong className="text-slate-800">Governance:</strong> All deprovisioning executions strictly gated behind authorized human review in conformance with SOC 2 CC6.2 requirements.
-          </p>
-        </div>
+        {/* Scope Notes (Collapsed Behind Dropdown) */}
+        <details className="text-xs text-slate-600 group">
+          <summary className="font-mono text-[11px] font-semibold text-slate-600 hover:text-slate-900 cursor-pointer select-none flex items-center gap-1 list-none">
+            <ChevronDown size={14} className="text-slate-400 group-open:rotate-180 transition-transform" />
+            <span>View Regulatory Mandates & Audit Scope Statements</span>
+          </summary>
+          <div className="mt-2 p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-1.5 font-sans text-xs">
+            <p>
+              <strong className="text-slate-800">Scope:</strong> All separated employee accounts across Google Workspace, GitHub Enterprise, AWS IAM, and Slack Grid were evaluated.
+            </p>
+            <p>
+              <strong className="text-slate-800">Governance:</strong> All deprovisioning executions strictly gated behind authorized human review in conformance with SOC 2 CC6.2 requirements.
+            </p>
+          </div>
+        </details>
 
         {/* Findings Ledger Table */}
-        <div className="overflow-x-auto rounded border border-slate-200">
+        <div className="overflow-x-auto rounded-xl border border-slate-200">
           <table className="w-full text-left text-xs text-slate-800 divide-y divide-slate-200">
-            <thead className="bg-slate-50 text-slate-600 font-medium uppercase text-[10px] font-mono">
+            <thead className="bg-slate-50 text-slate-600 font-bold uppercase text-[10px] font-mono">
               <tr>
-                <th className="px-3 py-2">User</th>
-                <th className="px-3 py-2">Platform</th>
-                <th className="px-3 py-2">Separation Date</th>
-                <th className="px-3 py-2">Last Active Login</th>
-                <th className="px-3 py-2">Risk</th>
-                <th className="px-3 py-2 text-right">Status</th>
+                <th className="px-3.5 py-2.5">User</th>
+                <th className="px-3.5 py-2.5">Platform</th>
+                <th className="px-3.5 py-2.5">Separation Date</th>
+                <th className="px-3.5 py-2.5">Last Active Login</th>
+                <th className="px-3.5 py-2.5">Risk</th>
+                <th className="px-3.5 py-2.5 text-right">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-sans">
               {findings.map(f => (
                 <tr key={f.id} className="hover:bg-slate-50/70">
-                  <td className="px-3 py-2">
-                    <div className="font-medium text-slate-900">{f.hrEmployee.fullName}</div>
+                  <td className="px-3.5 py-2.5">
+                    <div className="font-bold text-slate-900">{f.hrEmployee.fullName}</div>
                     <div className="text-[11px] font-mono text-slate-400">{f.saasUser.accountEmail}</div>
                   </td>
-                  <td className="px-3 py-2 capitalize font-mono text-slate-700">{f.platform.replace('_', ' ')}</td>
-                  <td className="px-3 py-2 font-mono text-slate-700">{f.hrEmployee.exitDate}</td>
-                  <td className="px-3 py-2 font-mono text-slate-700">
+                  <td className="px-3.5 py-2.5 capitalize font-mono text-slate-700">{f.platform.replace('_', ' ')}</td>
+                  <td className="px-3.5 py-2.5 font-mono text-slate-700">{f.hrEmployee.exitDate}</td>
+                  <td className="px-3.5 py-2.5 font-mono text-slate-700">
                     {f.lastLoginTimestamp.replace('T', ' ').replace('Z', '')}
                   </td>
-                  <td className="px-3 py-2">
-                    <span className={`px-1.5 py-0.2 rounded text-[10px] font-mono ${
-                      f.riskLevel === 'CRITICAL' ? 'bg-rose-50 text-rose-700 font-semibold' : 'text-slate-600'
+                  <td className="px-3.5 py-2.5">
+                    <span className={`px-1.5 py-0.2 rounded text-[10px] font-mono font-bold ${
+                      f.riskLevel === 'CRITICAL' ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-slate-100 text-slate-700'
                     }`}>
                       {f.riskLevel}
                     </span>
                   </td>
-                  <td className="px-3 py-2 text-right font-mono text-[11px]">
+                  <td className="px-3.5 py-2.5 text-right font-mono text-[11px]">
                     {f.deprovisionStatus === 'VERIFIED_REVOKED' ? (
-                      <span className="text-emerald-700 font-medium">Revoked (Verified)</span>
+                      <span className="text-emerald-700 font-bold">Revoked (Verified)</span>
                     ) : (
-                      <span className="text-amber-700">{f.deprovisionStatus}</span>
+                      <span className="text-amber-700 font-bold">{f.deprovisionStatus}</span>
                     )}
                   </td>
                 </tr>
@@ -189,7 +206,7 @@ export const AuditComplianceReport: React.FC<AuditComplianceReportProps> = ({
         {/* Footer Hash */}
         <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] font-mono text-slate-400">
           <div>SHA-256 Digest: 7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069</div>
-          <div>Signer: IT Security Admin (Hiten S)</div>
+          <div>Signer: Lead Auditor (Hiten S)</div>
         </div>
       </div>
     </div>

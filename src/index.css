@@ -2,31 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --color-bg: #f8fafc;
-    --color-card: #ffffff;
-    --color-border: #e2e8f0;
-    --color-text: #0f172a;
-    --color-muted: #64748b;
-  }
+/* AtherPanel 1:1 Design System & Typography */
+:root {
+  font-family:
+    "Segoe UI Variable",
+    "Aptos",
+    "Segoe UI",
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  
+  --background: #f4f6f8;
+  --surface: #ffffff;
+  --surface-soft: #edf2f5;
+  --surface-raised: #e8eef1;
+  --text: #18252e;
+  --text-muted: #5b6b77;
+  --border: #dce3e8;
+  --border-strong: #bdc9d1;
+  --accent: #047857;
+  --accent-soft: #04785714;
+  --accent-fill: #c2f0df;
+  --accent-fill-ink: #07573e;
+  --accent-ink: #09281e;
+  --danger: #bf3247;
+  --danger-soft: #bf324714;
+  --success: #087b53;
+  --success-soft: #087b5314;
+  --warning: #946411;
+  --sidebar-width: 260px;
+  --topbar-height: 60px;
+  --shadow: 0 16px 48px #253a461b;
+  --card-padding: 20px;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-quick: 200ms;
+  --motion-enter: 280ms;
+}
 
+@layer base {
   body {
-    background-color: #f8fafc;
-    color: #0f172a;
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'tnum';
+    background-color: var(--background);
+    color: var(--text);
+    font-family: var(--font-sans, "Segoe UI Variable", "Aptos", "Segoe UI", Inter, system-ui, sans-serif);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-size: 13px;
+    font-size: 13.5px;
     line-height: 1.45;
-    letter-spacing: -0.011em;
   }
 
-  /* Impeccable craft-floor: themed scrollbars, selection, and focus states */
   ::selection {
-    background-color: #0f172a;
+    background-color: #07573e;
     color: #ffffff;
   }
 
@@ -36,15 +65,422 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: #edf2f5;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 3px;
+    background: #bdc9d1;
+    border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #95a4b2;
   }
+}
+
+/* AtherPanel Workspace Layout Classes */
+.workspace-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.workspace-sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  flex-shrink: 0;
+  user-select: none;
+  z-index: 40;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--topbar-height);
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #0f172a;
+  display: grid;
+  place-items: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.sidebar-brand-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sidebar-brand-copy strong {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.sidebar-brand-copy small {
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.sidebar-navigation {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 10px;
+  overflow-y: auto;
+}
+
+.sidebar-section-label {
+  padding: 8px 10px 4px;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 800;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  min-height: 46px;
+  gap: 12px;
+  padding: 0 12px;
+  border-radius: 10px;
+  text-align: left;
+  color: var(--text-muted);
+  background: transparent;
+  transition: all var(--motion-quick) var(--motion-ease);
+  cursor: pointer;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.sidebar-item:hover {
+  color: var(--text);
+  background: var(--surface-soft);
+}
+
+.sidebar-item.active {
+  color: var(--accent-fill-ink);
+  background: var(--accent-fill);
+  font-weight: 700;
+}
+
+.sidebar-item-icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.sidebar-item-label {
+  flex: 1;
+  truncate: true;
+  font-size: 13.5px;
+}
+
+.sidebar-item-chevron {
+  opacity: 0.4;
+  margin-left: auto;
+}
+
+.sidebar-item.active .sidebar-item-chevron {
+  opacity: 0.9;
+  color: var(--accent-fill-ink);
+}
+
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.profile-avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #047857;
+  color: white;
+  font-size: 12px;
+  font-weight: 750;
+  flex-shrink: 0;
+}
+
+.profile-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-copy strong {
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--text);
+  truncate: true;
+}
+
+.profile-copy small {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  truncate: true;
+}
+
+/* AtherPanel Topbar */
+.workspace-topbar {
+  height: var(--topbar-height);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.ribbon-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.015em;
+}
+
+.ribbon-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* AtherPanel Settings Geometry */
+.settings-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: calc(100vh - var(--topbar-height));
+  background: var(--surface);
+}
+
+.settings-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 14px;
+  border-right: 1px solid var(--border);
+  background: var(--surface-soft);
+}
+
+.settings-nav-heading {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-category-list {
+  display: grid;
+  gap: 16px;
+}
+
+.settings-category-group {
+  display: grid;
+  gap: 6px;
+}
+
+.settings-category-group > p {
+  margin: 0;
+  padding: 0 8px 4px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.settings-category-group button {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 16px;
+  align-items: center;
+  min-height: 52px;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  color: var(--text-muted);
+  background: transparent;
+  text-align: left;
+  transition: all var(--motion-quick) var(--motion-ease);
+  border: none;
+  cursor: pointer;
+}
+
+.settings-category-group button > span:first-child {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.settings-category-group button > span:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1.5px;
+}
+
+.settings-category-group button strong {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-category-group button small {
+  overflow: hidden;
+  font-size: 10px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+.settings-category-group button:hover {
+  background: color-mix(in srgb, var(--border) 40%, var(--surface));
+  color: var(--text);
+}
+
+.settings-category-group button.active {
+  background: var(--accent-fill);
+  color: var(--accent-fill-ink);
+}
+
+.settings-category-group button.active strong {
+  color: var(--accent-fill-ink);
+}
+
+.settings-category-group button.active small {
+  color: color-mix(in srgb, var(--accent-fill-ink) 80%, transparent);
+}
+
+.settings-content {
+  padding: 28px 36px;
+  overflow-y: auto;
+  background: var(--surface);
+}
+
+.settings-heading {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.settings-heading h1 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.settings-heading .eyebrow {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.settings-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* AtherPanel Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: border-color var(--motion-quick) var(--motion-ease);
+}
+
+.metric-card:hover {
+  border-color: var(--border-strong);
+}
+
+.metric-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-muted);
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.metric-card strong {
+  font-size: 26px;
+  font-weight: 750;
+  color: var(--text);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.metric-card small {
+  font-size: 11px;
+  color: var(--text-muted);
 }

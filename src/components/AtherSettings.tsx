@@ -1,0 +1,420 @@
+import React, { useState } from 'react';
+import { 
+  ArrowLeft, 
+  ChevronRight, 
+  UserRound, 
+  LockKeyhole, 
+  SlidersHorizontal, 
+  Key, 
+  Sparkles, 
+  ShieldCheck, 
+  Check, 
+  Save, 
+  Copy,
+  AlertCircle
+} from 'lucide-react';
+
+export interface AuditorUser {
+  name: string;
+  email: string;
+  role: string;
+}
+
+interface AtherSettingsProps {
+  user: AuditorUser;
+  onUpdateUser: (updated: AuditorUser) => void;
+  onBack: () => void;
+}
+
+const SETTINGS_GROUPS = [
+  {
+    name: 'Personal',
+    items: [
+      { id: 'profile', label: 'Profile', detail: 'Auditor identity and signature', icon: UserRound },
+      { id: 'security', label: 'Security & MFA', detail: 'SOC 2 multi-factor session', icon: LockKeyhole },
+      { id: 'credentials', label: 'Test Credentials', detail: 'Evaluation accounts & role switcher', icon: Key },
+    ]
+  },
+  {
+    name: 'Workspace & AI',
+    items: [
+      { id: 'ai', label: 'AI Engine (Gemini)', detail: 'gemini-3.5-flash-lite config', icon: Sparkles },
+      { id: 'policies', label: 'Audit Policies & SLA', detail: 'SOC 2 CC6.2 24h mandate', icon: ShieldCheck },
+    ]
+  }
+];
+
+export const AtherSettings: React.FC<AtherSettingsProps> = ({
+  user,
+  onUpdateUser,
+  onBack
+}) => {
+  const [selectedCategory, setSelectedCategory] = useState<string>('profile');
+  const [formData, setFormData] = useState<AuditorUser>({ ...user });
+  const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+
+  const activeGroupItem = SETTINGS_GROUPS
+    .flatMap(g => g.items)
+    .find(item => item.id === selectedCategory) || SETTINGS_GROUPS[0].items[0];
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    onUpdateUser(formData);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 2500);
+  };
+
+  const handleSwitchAccount = (newAcc: AuditorUser) => {
+    setFormData(newAcc);
+    onUpdateUser(newAcc);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 2000);
+  };
+
+  const copyToClipboard = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedKey(id);
+    setTimeout(() => setCopiedKey(null), 1500);
+  };
+
+  return (
+    <div className="settings-layout">
+      {/* AtherPanel Left Navigation Bar */}
+      <aside className="settings-navigation">
+        <div className="settings-nav-heading">
+          <button
+            type="button"
+            onClick={onBack}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-200 transition-colors cursor-pointer border border-slate-300 bg-white"
+          >
+            <ArrowLeft size={16} />
+            <span>Back to workspace</span>
+          </button>
+        </div>
+
+        <div className="settings-category-list">
+          {SETTINGS_GROUPS.map(group => (
+            <div key={group.name} className="settings-category-group">
+              <p>{group.name}</p>
+              <div>
+                {group.items.map(item => {
+                  const Icon = item.icon;
+                  const isActive = selectedCategory === item.id;
+                  return (
+                    <button
+                      type="button"
+                      key={item.id}
+                      onClick={() => setSelectedCategory(item.id)}
+                      className={isActive ? 'active' : ''}
+                    >
+                      <span>
+                        <Icon size={18} />
+                      </span>
+                      <span>
+                        <strong>{item.label}</strong>
+                        <small>{item.detail}</small>
+                      </span>
+                      <ChevronRight size={15} />
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      </aside>
+
+      {/* AtherPanel Right Content Panel */}
+      <section className="settings-content">
+        <div className="settings-panel max-w-3xl">
+          <div className="settings-heading">
+            <span className="eyebrow">AtherPanel Settings</span>
+            <h1>{activeGroupItem.label}</h1>
+          </div>
+
+          {/* Profile Panel */}
+          {selectedCategory === 'profile' && (
+            <form onSubmit={handleSaveProfile} className="settings-card space-y-5">
+              <div className="flex items-center gap-4 pb-4 border-b border-slate-100">
+                <div className="w-14 h-14 rounded-xl bg-emerald-700 text-white font-bold text-lg grid place-items-center">
+                  {formData.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900">{formData.name}</h3>
+                  <p className="text-xs text-slate-500 font-mono">{formData.role} • AcmeCorp SOC 2 Signer</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 font-mono mb-1">
+                    Auditor Display Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg bg-white text-slate-900 focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 font-mono mb-1">
+                    Role & Title
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.role}
+                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg bg-white text-slate-900 focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+
+                <div className="sm:col-span-2">
+                  <label className="block text-xs font-semibold text-slate-700 font-mono mb-1">
+                    Email Address (Sign-off Authority)
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg bg-white text-slate-900 focus:outline-none focus:border-emerald-600"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+                {saveSuccess ? (
+                  <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 font-medium font-mono">
+                    <Check size={14} /> Profile preferences saved!
+                  </span>
+                ) : (
+                  <span className="text-xs text-slate-400 font-mono">Changes persist across session</span>
+                )}
+
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-emerald-700 text-white hover:bg-emerald-800 transition-colors shadow-xs cursor-pointer"
+                >
+                  <Save size={14} />
+                  <span>Save changes</span>
+                </button>
+              </div>
+            </form>
+          )}
+
+          {/* Test Credentials Switcher */}
+          {selectedCategory === 'credentials' && (
+            <div className="settings-card space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">Evaluation & Hackathon Test Personas</h3>
+                  <p className="text-xs text-slate-500">Switch between pre-configured auditor credentials to test role authorization and sign-off policies.</p>
+                </div>
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  Ready to Test
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                {[
+                  {
+                    name: 'Hiten S',
+                    email: 'hiten.dev.ai@gmail.com',
+                    role: 'Lead Information Security Auditor',
+                    level: 'Level 3 (Full HITL Approval & Revoke Authority)',
+                    active: formData.email === 'hiten.dev.ai@gmail.com'
+                  },
+                  {
+                    name: 'Alex Morgan',
+                    email: 'alex.secops@acmecorp.io',
+                    role: 'SecOps Administrator',
+                    level: 'Level 2 (Deprovisioning Executor)',
+                    active: formData.email === 'alex.secops@acmecorp.io'
+                  },
+                  {
+                    name: 'Elena Rostova',
+                    email: 'elena.compliance@acmecorp.io',
+                    role: 'Compliance & Audit Officer',
+                    level: 'Level 1 (Read-Only Auditor & Report Exporter)',
+                    active: formData.email === 'elena.compliance@acmecorp.io'
+                  }
+                ].map((persona) => (
+                  <div
+                    key={persona.email}
+                    className={`p-3.5 rounded-xl border transition-all flex items-center justify-between ${
+                      persona.active
+                        ? 'border-emerald-600 bg-emerald-50/40 shadow-xs'
+                        : 'border-slate-200 bg-white hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-xs text-slate-900">{persona.name}</span>
+                        {persona.active && (
+                          <span className="px-1.5 py-0.2 rounded text-[9.5px] font-mono font-semibold bg-emerald-700 text-white">
+                            Active
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-[11px] font-mono text-slate-500">{persona.email} • {persona.role}</div>
+                      <div className="text-[10.5px] text-emerald-800 font-mono font-medium">{persona.level}</div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => copyToClipboard(persona.email, persona.email)}
+                        className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+                        title="Copy email"
+                      >
+                        {copiedKey === persona.email ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleSwitchAccount({ name: persona.name, email: persona.email, role: persona.role })}
+                        disabled={persona.active}
+                        className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-40 transition-colors cursor-pointer"
+                      >
+                        {persona.active ? 'Current User' : 'Switch To This Account'}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Security & MFA */}
+          {selectedCategory === 'security' && (
+            <div className="settings-card space-y-4">
+              <div className="pb-3 border-b border-slate-100">
+                <h3 className="text-sm font-bold text-slate-900">SOC 2 CC6.2 Multi-Factor Session</h3>
+                <p className="text-xs text-slate-500">Cryptographically bound auditor session tokens with automated expiration.</p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-500 block text-[10.5px] uppercase">Session State</span>
+                  <strong className="text-emerald-700 block mt-1 font-semibold">AUTHENTICATED (SOC 2 MFA)</strong>
+                </div>
+
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-500 block text-[10.5px] uppercase">Session Key Fingerprint</span>
+                  <strong className="text-slate-800 block mt-1 font-semibold truncate">sha256:8f2a...c09e</strong>
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <label className="block text-xs font-semibold text-slate-700 font-mono mb-1">
+                  Active Session Token
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value="acme_audit_session_7f18b9c240fa91176e330ad"
+                    className="flex-1 px-3 py-2 text-xs border border-slate-300 rounded-lg bg-slate-50 text-slate-600 font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard('acme_audit_session_7f18b9c240fa91176e330ad', 'token')}
+                    className="px-3 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 text-xs font-mono font-medium flex items-center gap-1 cursor-pointer"
+                  >
+                    {copiedKey === 'token' ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
+                    <span>{copiedKey === 'token' ? 'Copied' : 'Copy'}</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* AI Engine & Gemini Configuration */}
+          {selectedCategory === 'ai' && (
+            <div className="settings-card space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">Google Gemini 3.5 Flash-Lite Engine</h3>
+                  <p className="text-xs text-slate-500">Live AI Studio integration via process.env.GEMINI_API_KEY.</p>
+                </div>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+                  Live Connected
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-500 block text-[10px] uppercase">Engine Target</span>
+                  <strong className="text-slate-900 block mt-0.5">gemini-3.5-flash-lite</strong>
+                </div>
+
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-500 block text-[10px] uppercase">API Key Status</span>
+                  <strong className="text-emerald-700 block mt-0.5">Configured (39 bytes)</strong>
+                </div>
+
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-500 block text-[10px] uppercase">Latency</span>
+                  <strong className="text-slate-900 block mt-0.5">~340ms (Zero-Rate-Limit Cache)</strong>
+                </div>
+
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                  <span className="text-slate-500 block text-[10px] uppercase">SOC 2 Grounding</span>
+                  <strong className="text-emerald-700 block mt-0.5">Deterministic Guardrails Enabled</strong>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Audit Policies */}
+          {selectedCategory === 'policies' && (
+            <div className="settings-card space-y-4">
+              <div className="pb-3 border-b border-slate-100">
+                <h3 className="text-sm font-bold text-slate-900">Compliance Baselines & De-provisioning SLA</h3>
+                <p className="text-xs text-slate-500">Configured compliance SLAs mapped to formal regulatory frameworks.</p>
+              </div>
+
+              <div className="space-y-3 text-xs">
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
+                  <div>
+                    <strong className="text-slate-900 font-semibold block">SOC 2 CC6.2 Mandate</strong>
+                    <span className="text-slate-500 font-mono text-[11px]">Enforce revocation SLA &lt; 24 hours post-termination</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800">
+                    24h SLA Active
+                  </span>
+                </div>
+
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
+                  <div>
+                    <strong className="text-slate-900 font-semibold block">ISO 27001 Annex A.9.2.6</strong>
+                    <span className="text-slate-500 font-mono text-[11px]">Removal or adjustment of access rights upon departure</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-100 text-emerald-800">
+                    Enforced
+                  </span>
+                </div>
+
+                <div className="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between">
+                  <div>
+                    <strong className="text-slate-900 font-semibold block">Human-in-the-Loop Sign-off Threshold</strong>
+                    <span className="text-slate-500 font-mono text-[11px]">Required for all high-blast-radius SaaS deprovisionings</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-200 text-slate-800">
+                    Mandatory (TC4)
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+};

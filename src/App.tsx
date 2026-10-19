@@ -11,11 +11,15 @@ import {
   Award, 
   Layers, 
   Terminal, 
-  Activity
+  Activity,
+  Search,
+  Settings as SettingsIcon,
+  BookOpen
 } from 'lucide-react';
 import { Sidebar } from './components/Sidebar';
 import { LoginPage } from './components/LoginPage';
 import { SpotlightTour } from './components/SpotlightTour';
+import { Dashboard } from './components/Dashboard';
 import { AgentExecutionStream } from './components/AgentExecutionStream';
 import { DiscrepancyTable } from './components/DiscrepancyTable';
 import { HITLApprovalQueue } from './components/HITLApprovalQueue';
@@ -23,10 +27,23 @@ import { MockConsolesViewer } from './components/MockConsolesViewer';
 import { TestCasesRunner } from './components/TestCasesRunner';
 import { AuditComplianceReport } from './components/AuditComplianceReport';
 import { AiSecurityCopilot } from './components/AiSecurityCopilot';
+import { AtherSettings } from './components/AtherSettings';
 
 import { INITIAL_HR_LEAVERS } from './data/hrLeavers';
 import { INITIAL_MOCK_USERS } from './data/mockConsoles';
 import { AuditAgent, AuditAgentState } from './services/auditAgent';
+
+const PAGE_TITLES: Record<string, string> = {
+  dashboard: 'Dashboard',
+  agent: 'Agent Blueprint',
+  copilot: 'AI Security Copilot',
+  discrepancies: 'Discrepancy Matrix',
+  hitl: 'HITL Approvals',
+  consoles: 'Mock Consoles',
+  testsuite: 'Validation Test Suite (TC1–TC4)',
+  report: 'Compliance Report',
+  settings: 'Settings'
+};
 
 export const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
@@ -36,7 +53,9 @@ export const App: React.FC = () => {
     role: 'Lead Information Security Auditor'
   });
   const [tutorialOpen, setTutorialOpen] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<string>('agent');
+  const [activeTab, setActiveTab] = useState<string>('dashboard');
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const lastPage = useRef<string>('dashboard');
   
   const agentRef = useRef<AuditAgent | null>(null);
   const [agentState, setAgentState] = useState<AuditAgentState>(() => {
@@ -44,6 +63,13 @@ export const App: React.FC = () => {
     agentRef.current = agent;
     return agent.getState();
   });
+
+  // Track last non-settings page for the Back button
+  useEffect(() => {
+    if (activeTab !== 'settings') {
+      lastPage.current = activeTab;
+    }
+  }, [activeTab]);
 
   // Re-instantiate agent when resetting
   const handleReset = () => {
@@ -77,146 +103,168 @@ export const App: React.FC = () => {
     }
   }, []);
 
-  const pendingCount = agentState.tickets.filter(t => t.status === 'AWAITING_APPROVAL').length;
-  const verifiedCount = agentState.findings.filter(f => f.deprovisionStatus === 'VERIFIED_REVOKED').length;
-
   // Show Login Page if not logged in
   if (!isLoggedIn) {
     return (
       <LoginPage
-        onLogin={(user) => {
+        onLogin={(user, triggerTour) => {
           setAuditorUser(user);
           setIsLoggedIn(true);
+          if (triggerTour) {
+            setTimeout(() => setTutorialOpen(true), 300);
+          }
         }}
       />
     );
   }
 
+  const pageTitle = PAGE_TITLES[activeTab] || 'Audit Workspace';
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex font-sans">
-      {/* Enterprise Left Sidebar Navigation */}
+    <div className="workspace-container">
+      {/* AtherPanel Left Navigation Sidebar */}
       <Sidebar
         agentState={agentState}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
-        onRunAudit={handleRunAudit}
-        onReset={handleReset}
         onLogout={() => setIsLoggedIn(false)}
         tutorialOpen={tutorialOpen}
         setTutorialOpen={setTutorialOpen}
         auditorUser={auditorUser}
       />
 
-      {/* Main Content Pane */}
-      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
-        <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-5 space-y-4">
-          {/* Spotlight Interactive Tour (Non-cluttering overlay) */}
+      {/* Main Content Workspace */}
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+        {/* AtherPanel Topbar */}
+        <header className="workspace-topbar">
+          <div className="flex items-center gap-3">
+            <h1 className="ribbon-title">{pageTitle}</h1>
+          </div>
+
+          {/* AtherPanel Search Bar */}
+          <div className="hidden md:flex items-center relative max-w-sm w-full">
+            <Search size={15} className="absolute left-3 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search leavers, SaaS accounts, tickets..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-100/70 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:bg-white focus:border-emerald-600 transition-all font-sans"
+            />
+          </div>
+
+          {/* AtherPanel Topbar Actions */}
+          <div className="ribbon-actions">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-slate-100 text-slate-700">
+              <span className={`w-2 h-2 rounded-full ${agentState.isRunning ? 'bg-amber-500 animate-pulse' : 'bg-emerald-600'}`} />
+              <span>{agentState.isRunning ? 'Auditing...' : 'Audit Ready'}</span>
+            </span>
+
+            <span className="hidden lg:inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-mono font-medium bg-emerald-50 text-emerald-800 border border-emerald-200">
+              <Sparkles size={12} className="text-emerald-600" />
+              <span>Gemini 3.5 Flash-Lite</span>
+            </span>
+
+            <button
+              type="button"
+              onClick={() => setTutorialOpen(true)}
+              className="p-1.5 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer"
+              title="Interactive Tour"
+            >
+              <BookOpen size={18} />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveTab('settings')}
+              className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                activeTab === 'settings' ? 'bg-emerald-100 text-emerald-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+              title="Account Settings"
+            >
+              <SettingsIcon size={18} />
+            </button>
+          </div>
+        </header>
+
+        {/* Scrollable Content Body */}
+        <main className="flex-1 overflow-y-auto">
+          {/* Spotlight Interactive Tour Modal */}
           <SpotlightTour
             isOpen={tutorialOpen}
             onClose={() => setTutorialOpen(false)}
             onSelectTab={(t) => setActiveTab(t)}
           />
 
-          {/* Minimalist Ruled Metric Strip */}
-          <div data-tour="metrics" className="bg-white border border-slate-200 rounded-md grid grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-slate-200">
-            <div className="px-4 py-2.5">
-              <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider font-mono">
-                HR Leavers
-              </span>
-              <div className="text-lg font-semibold font-mono text-slate-900 mt-0.5">
-                {agentState.leavers.length}
-              </div>
+          {/* Render Active View */}
+          {activeTab === 'settings' ? (
+            <AtherSettings
+              user={auditorUser}
+              onUpdateUser={setAuditorUser}
+              onBack={() => setActiveTab(lastPage.current || 'dashboard')}
+            />
+          ) : (
+            <div className="max-w-6xl w-full mx-auto px-6 py-6 space-y-6">
+              {activeTab === 'dashboard' && (
+                <Dashboard
+                  agentState={agentState}
+                  onNavigateTab={(t) => setActiveTab(t)}
+                  onRunAudit={handleRunAudit}
+                  currentUser={auditorUser}
+                  onSwitchUser={setAuditorUser}
+                />
+              )}
+
+              {activeTab === 'agent' && (
+                <AgentExecutionStream
+                  steps={agentState.steps}
+                  currentStepIndex={agentState.currentStepIndex}
+                  isRunning={agentState.isRunning}
+                  isWaitingApproval={agentState.isWaitingApproval}
+                  onNavigateToApprovals={() => setActiveTab('hitl')}
+                />
+              )}
+
+              {activeTab === 'copilot' && (
+                <AiSecurityCopilot
+                  agentState={agentState}
+                  onSelectTicket={() => setActiveTab('hitl')}
+                />
+              )}
+
+              {activeTab === 'discrepancies' && (
+                <DiscrepancyTable
+                  findings={agentState.findings}
+                  onSelectTicket={() => setActiveTab('hitl')}
+                />
+              )}
+
+              {activeTab === 'hitl' && (
+                <HITLApprovalQueue
+                  tickets={agentState.tickets}
+                  onApproveTicket={handleApproveTicket}
+                  onApproveAll={handleApproveAll}
+                />
+              )}
+
+              {activeTab === 'consoles' && (
+                <MockConsolesViewer
+                  mockUsers={agentState.mockUsers}
+                  onReset={handleReset}
+                />
+              )}
+
+              {activeTab === 'testsuite' && (
+                <TestCasesRunner />
+              )}
+
+              {activeTab === 'report' && (
+                <AuditComplianceReport
+                  agentState={agentState}
+                  onNavigateTab={(t) => setActiveTab(t)}
+                />
+              )}
             </div>
-
-            <div className="px-4 py-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider font-mono">
-                  Active Violations
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
-              </div>
-              <div className="text-lg font-semibold font-mono text-rose-600 mt-0.5">
-                {agentState.findings.filter(f => f.status === 'UNAUTHORIZED_ACTIVE').length}
-              </div>
-            </div>
-
-            <div className="px-4 py-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider font-mono">
-                  Pending Approvals
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-              </div>
-              <div className="text-lg font-semibold font-mono text-slate-900 mt-0.5">
-                {pendingCount}
-              </div>
-            </div>
-
-            <div className="px-4 py-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-medium text-slate-500 uppercase tracking-wider font-mono">
-                  Remediated & Verified
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              </div>
-              <div className="text-lg font-semibold font-mono text-emerald-600 mt-0.5">
-                {verifiedCount}
-              </div>
-            </div>
-          </div>
-
-          {/* Tab Content Panes */}
-          {activeTab === 'agent' && (
-            <AgentExecutionStream
-              steps={agentState.steps}
-              currentStepIndex={agentState.currentStepIndex}
-              isRunning={agentState.isRunning}
-              isWaitingApproval={agentState.isWaitingApproval}
-              onNavigateToApprovals={() => setActiveTab('hitl')}
-            />
-          )}
-
-          {activeTab === 'copilot' && (
-            <AiSecurityCopilot
-              leavers={agentState.leavers}
-              findings={agentState.findings}
-              tickets={agentState.tickets}
-              users={agentState.saasUsers}
-              onNavigateToTab={(t) => setActiveTab(t)}
-            />
-          )}
-
-          {activeTab === 'discrepancies' && (
-            <DiscrepancyTable
-              findings={agentState.findings}
-              onSelectTicket={() => setActiveTab('hitl')}
-            />
-          )}
-
-          {activeTab === 'hitl' && (
-            <HITLApprovalQueue
-              tickets={agentState.tickets}
-              onApproveTicket={handleApproveTicket}
-              onApproveAll={handleApproveAll}
-            />
-          )}
-
-          {activeTab === 'consoles' && (
-            <MockConsolesViewer
-              users={agentState.saasUsers}
-            />
-          )}
-
-          {activeTab === 'testsuite' && (
-            <TestCasesRunner />
-          )}
-
-          {activeTab === 'report' && (
-            <AuditComplianceReport
-              findings={agentState.findings}
-              leavers={agentState.leavers}
-              users={agentState.saasUsers}
-            />
           )}
         </main>
       </div>
