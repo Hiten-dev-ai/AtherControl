@@ -2,3 +2,9 @@ node_modules/
 dist/
 .DS_Store
 *.log
+test_*.js
+body.json
+dom_snapshot.html
+ui_*.png
+ui_*.json
+

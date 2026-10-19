@@ -128,8 +128,33 @@ export const HITLApprovalQueue: React.FC<HITLApprovalQueueProps> = ({
                     </div>
 
                     <p className="text-xs text-slate-300 pl-0.5">
-                      <span className="text-slate-500">Proposed Action:</span> {ticket.actionSummary}
+                      <span className="text-slate-500 font-medium">Proposed Action:</span> {ticket.actionSummary}
                     </p>
+
+                    <div className="pt-1.5 flex flex-wrap items-center gap-2 text-[11px] font-mono">
+                      <span className="text-slate-500">AI Blast Radius:</span>
+                      {ticket.targetPlatform === 'github' && (
+                        <span className="px-2 py-0.5 rounded bg-rose-950/40 text-rose-300 border border-rose-900/60">
+                          Critical • Source code exfiltration, GPG/SSH keys, Org Admin
+                        </span>
+                      )}
+                      {ticket.targetPlatform === 'aws_iam' && (
+                        <span className="px-2 py-0.5 rounded bg-rose-950/40 text-rose-300 border border-rose-900/60">
+                          Critical • Production cloud infrastructure, PowerUserAccess, CLI API keys
+                        </span>
+                      )}
+                      {ticket.targetPlatform === 'google_workspace' && (
+                        <span className="px-2 py-0.5 rounded bg-amber-950/40 text-amber-300 border border-amber-900/60">
+                          High • Corporate email, Google Drive files, OAuth SSO token persistence
+                        </span>
+                      )}
+                      {ticket.targetPlatform === 'slack' && (
+                        <span className="px-2 py-0.5 rounded bg-blue-950/40 text-blue-300 border border-blue-900/60">
+                          Moderate • Confidential executive channels, internal message history
+                        </span>
+                      )}
+                      <span className="text-slate-500">SOC 2 CC6.2 Mandate</span>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">

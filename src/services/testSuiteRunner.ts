@@ -145,7 +145,7 @@ export class TestCaseRunner {
 }
 
 // Support CLI execution: tsx src/services/testSuiteRunner.ts
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (typeof process !== 'undefined' && process?.argv?.[1] && process.argv[1].includes('testSuiteRunner')) {
   console.log('Running Leaver Access Review Auditor Official Test Suite (TC1-TC4)...\n');
   const results = TestCaseRunner.runAllTests();
   results.forEach(r => {

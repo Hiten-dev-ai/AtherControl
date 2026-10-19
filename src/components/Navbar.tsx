@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Play, CheckCircle2, AlertTriangle, RefreshCw, Terminal, Layers } from 'lucide-react';
+import { Shield, Play, CheckCircle2, AlertTriangle, RefreshCw, Terminal, Layers, Sparkles } from 'lucide-react';
 import { AuditAgentState } from '../services/auditAgent';
 
 interface NavbarProps {
@@ -53,6 +53,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const navTabs = [
     { id: 'agent', label: 'Agent Blueprint Trace' },
+    { id: 'copilot', label: 'AI Copilot & Risk Brain', isAi: true },
     { id: 'discrepancies', label: 'Discrepancy Matrix', badge: agentState.findings.filter(f => f.status === 'UNAUTHORIZED_ACTIVE').length },
     { id: 'hitl', label: 'HITL Approvals', badge: agentState.tickets.filter(t => t.status === 'AWAITING_APPROVAL').length },
     { id: 'consoles', label: 'Mock Admin Consoles' },
@@ -124,7 +125,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     : 'text-slate-400 hover:text-slate-200 hover:bg-surface-800/50'
                 }`}
               >
+                {tab.isAi && <Sparkles className="w-3.5 h-3.5 text-purple-400" />}
                 {tab.label}
+                {tab.isAi && (
+                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                    LLM
+                  </span>
+                )}
                 {typeof tab.badge === 'number' && tab.badge > 0 && (
                   <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono ${
                     tab.id === 'hitl' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'

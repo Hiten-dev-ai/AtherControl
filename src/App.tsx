@@ -20,6 +20,7 @@ import { HITLApprovalQueue } from './components/HITLApprovalQueue';
 import { MockConsolesViewer } from './components/MockConsolesViewer';
 import { TestCasesRunner } from './components/TestCasesRunner';
 import { AuditComplianceReport } from './components/AuditComplianceReport';
+import { AiSecurityCopilot } from './components/AiSecurityCopilot';
 
 import { INITIAL_HR_LEAVERS } from './data/hrLeavers';
 import { INITIAL_MOCK_USERS } from './data/mockConsoles';
@@ -160,6 +161,16 @@ export const App: React.FC = () => {
             isRunning={agentState.isRunning}
             isWaitingApproval={agentState.isWaitingApproval}
             onNavigateToApprovals={() => setActiveTab('hitl')}
+          />
+        )}
+
+        {activeTab === 'copilot' && (
+          <AiSecurityCopilot
+            leavers={agentState.leavers}
+            findings={agentState.findings}
+            tickets={agentState.tickets}
+            users={agentState.saasUsers}
+            onNavigateToTab={setActiveTab}
           />
         )}
 
