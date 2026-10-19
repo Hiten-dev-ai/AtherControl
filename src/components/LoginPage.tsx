@@ -15,7 +15,7 @@ interface LoginPageProps {
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState('hiten.dev.ai@gmail.com');
+  const [email, setEmail] = useState('lead.auditor@acmecorp.io');
   const [password, setPassword] = useState('SuperSecretAuditorPass2026!');
   const [showPassword, setShowPassword] = useState(false);
   const [role] = useState('Lead Information Security Auditor');
@@ -52,7 +52,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       setIsLoading(false);
       proceedLogin({
         name: 'Hiten S',
-        email: 'hiten.dev.ai@gmail.com',
+        email: 'lead.auditor@acmecorp.io',
         role: 'Lead Information Security Auditor'
       });
     }, 200);

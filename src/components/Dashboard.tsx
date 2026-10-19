@@ -132,7 +132,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
           {[
             {
               name: 'Hiten S',
-              email: 'hiten.dev.ai@gmail.com',
+              email: 'lead.auditor@acmecorp.io',
               role: 'Lead Information Security Auditor',
               desc: 'Full approval & ticket sign-off authority (Level 3)'
             },

@@ -63,23 +63,41 @@ All official evaluation scenarios have 100% automated test coverage in both Type
 npm install
 ```
 
-### 3. Launch Interactive Web Dashboard
+### 3. Quick Test Runners for Judges (.bat & .sh)
+For evaluator convenience, unified test scripts are provided:
+
+```bash
+# Windows: Double-click test.bat or run from CMD / PowerShell
+test.bat          # Interactive menu (Tests, Build, Dev Server)
+test.bat --ci     # Automated all-in-one CI test runner (TC1-TC4 + Build)
+test.bat --ts     # Run TypeScript test suite
+test.bat --py     # Run Python native test suite
+
+# Linux / macOS:
+chmod +x test.sh run.sh
+./test.sh         # Runs both TypeScript and Python TC1-TC4 test suites
+./test.sh --ci    # Full CI check (TS + Python + Build)
+./test.sh --dev   # Launch web application
+```
+
+### 4. Launch Interactive Web Dashboard
 ```bash
 npm run dev
+# or run.bat (Windows) / ./run.sh (Linux/macOS)
 ```
-Open **`http://localhost:5173`** in your browser.
+Open **`http://localhost:5173`** in your browser.  
+Default demo credentials: **`lead.auditor@acmecorp.io`** / Password: **`AtherAudit2026!`** (or click any of the 1-click Quick Demo buttons).
 
-### 4. Run Official Test Suite (CLI)
-You can verify all test cases directly from the terminal:
+### 5. Run Official Test Suite via NPM
 ```bash
-# TypeScript Test Runner
+# TypeScript Test Runner (TC1–TC4)
 npm run test:cli
 
-# Python Native Agent Test Runner
+# Python Native Agent Test Runner (TC1–TC4)
 python python_agent/test_suite.py
 ```
 
-### 5. Launch Express REST Backend (Optional)
+### 6. Launch Express REST Backend (Optional)
 ```bash
 npm run server
 ```

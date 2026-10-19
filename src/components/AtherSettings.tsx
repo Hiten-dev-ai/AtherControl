@@ -217,10 +217,10 @@ export const AtherSettings: React.FC<AtherSettingsProps> = ({
                 {[
                   {
                     name: 'Hiten S',
-                    email: 'hiten.dev.ai@gmail.com',
+                    email: 'lead.auditor@acmecorp.io',
                     role: 'Lead Information Security Auditor',
                     level: 'Level 3: Full HITL Approval & Revoke Authority',
-                    active: formData.email === 'hiten.dev.ai@gmail.com'
+                    active: formData.email === 'lead.auditor@acmecorp.io'
                   },
                   {
                     name: 'Alex Morgan',

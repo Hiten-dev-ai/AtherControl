@@ -48,7 +48,7 @@ export const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
   const [auditorUser, setAuditorUser] = useState({
     name: 'Hiten S',
-    email: 'hiten.dev.ai@gmail.com',
+    email: 'lead.auditor@acmecorp.io',
     role: 'Lead Information Security Auditor'
   });
   const [tutorialOpen, setTutorialOpen] = useState<boolean>(false);
