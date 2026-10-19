@@ -92,7 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <span className="sidebar-item-label">{item.label}</span>
 
               {item.badge !== null && (
-                <span className={`text-[11px] font-sans px-2 py-0.2 rounded-full font-bold ml-auto ${
+                <span className={`sidebar-item-badge text-[11px] font-sans px-2 py-0.2 rounded-full font-bold ml-auto ${
                   isActive
                     ? 'bg-emerald-900 text-emerald-100'
                     : typeof item.badge === 'number' && item.badge > 0
@@ -137,7 +137,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             type="button"
             onClick={onLogout}
             title="Sign out of audit console"
-            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0"
+            className="logout-button ml-auto"
           >
             <LogOut size={17} />
           </button>

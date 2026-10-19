@@ -24,9 +24,20 @@ async function verify() {
   // Wait 4 seconds for initial audit execution
   await new Promise(r => setTimeout(r, 4000));
 
-  // 1. Capture pristine 1:1 AtherPanel Dashboard
+  // 1a. Move mouse to center of page to capture compact 76px rail
+  await page.mouse.move(600, 400);
+  await new Promise(r => setTimeout(r, 600));
+  await page.screenshot({ path: './ui_sidebar_compact.png' });
+  console.log('Saved compact 76px sidebar screenshot to: ./ui_sidebar_compact.png');
+
+  // 1b. Hover over sidebar to trigger smooth expansion to 260px
+  await page.hover('aside.workspace-sidebar');
+  await new Promise(r => setTimeout(r, 600));
+  await page.screenshot({ path: './ui_sidebar_hover_expanded.png' });
+  console.log('Saved hover-expanded 260px sidebar screenshot to: ./ui_sidebar_hover_expanded.png');
+
+  // 1c. Standard dashboard view
   await page.screenshot({ path: './ui_dashboard.png' });
-  console.log('Saved pristine AtherPanel dashboard screenshot to: ./ui_dashboard.png');
 
   // 2. Open Settings (AtherPanel 1:1 Settings Page)
   await page.evaluate(() => {
