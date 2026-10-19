@@ -68,7 +68,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 dashboard-container" data-testid="dashboard-view">
       {/* Overview Card */}
       <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

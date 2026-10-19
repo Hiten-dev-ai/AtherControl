@@ -47,7 +47,7 @@ export const MockConsolesViewer: React.FC<MockConsolesViewerProps> = ({ users })
   ];
 
   return (
-    <div className="space-y-4">
+    <div data-tour="consoles" className="space-y-4 consoles-container">
       {/* Header with Ruling Margins */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200">
         <div className="flex items-center gap-2">
