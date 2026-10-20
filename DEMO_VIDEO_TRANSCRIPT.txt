@@ -1,0 +1,93 @@
+======================================================================
+ATHERCONTROL - DEMO VIDEO TRANSCRIPT & SCREENPLAY (2 - 2.5 MINS)
+Ziro Digital National Agentic AI Hackathon 2026
+URL: https://control.athergrid.dev
+======================================================================
+
+PREPARATION:
+1. Open https://control.athergrid.dev in Chrome.
+2. Press F11 for clean full-screen view.
+3. Start recording on the Login page.
+
+----------------------------------------------------------------------
+PART 1: THE HOOK & PROBLEM (0:00 - 0:30)
+----------------------------------------------------------------------
+[ACTION]:
+Start on AtherControl Login Screen (https://control.athergrid.dev).
+Click "One-Click Demo Login".
+
+[READ THIS]:
+"Hi everyone, I am Hiten S from R.M.K College of Engineering and Technology. Today I am presenting AtherControl, an autonomous agentic AI platform built for the Ziro Digital Hackathon to solve the problem statement: Leaver Access Review Auditor.
+
+When employees leave an organization, orphaned accounts across SaaS tools like Google Workspace, GitHub, and AWS create severe breach risks and trigger non-compliance under SOC 2 CC6.2 and ISO 27001. Manual IT reviews struggle with surname changes, disparate logins, and shared service bots. AtherControl fully automates this lifecycle."
+
+
+----------------------------------------------------------------------
+PART 2: AGENTIC WORKFLOW & ARCHITECTURE (0:30 - 1:00)
+----------------------------------------------------------------------
+[ACTION]:
+Hover over the sidebar to show the smooth 76px to 260px expansion.
+Click "Agent Blueprint" in the sidebar. Show the 6 steps running.
+
+[READ THIS]:
+"AtherControl operates on a deterministic six-phase agent loop:
+First, it UNDERSTANDS by ingesting HR separation rosters.
+Second, it REASONS using Google Gemini 3.5 Flash-Lite to correlate identities.
+Third, it BROWSES across mock SaaS admin consoles.
+Fourth, it prepares deprovisioning actions gated behind a strict Human-in-the-Loop barrier.
+Fifth, it VERIFIES revocation by re-reading live console status.
+And finally, it REPORTS compliance with a cryptographic SHA-256 evidence digest."
+
+
+----------------------------------------------------------------------
+PART 3: LIVE VERIFICATION OF TC1, TC2, TC3 (1:00 - 1:35)
+----------------------------------------------------------------------
+[ACTION]:
+Click "Discrepancy Matrix" in the sidebar.
+Click the "Evidence" button on Marcus Vance.
+Point out Sarah Jenkins-Hayes.
+Point to the service account filter.
+
+[READ THIS]:
+"In the Discrepancy Matrix, you can see all official evaluation scenarios handled:
+For Test Case 1, former employee Marcus Vance departed on October 5th, but our agent detected active GitHub credentials with a post-departure login on October 18th, flagging it as CRITICAL risk.
+
+For Test Case 2, Sarah Jenkins married and is recorded in HR as Sarah Jenkins-Hayes, but SaaS tools still use Sarah Jenkins. The agent accurately correlated her accounts via persistent work email and maiden surname analysis.
+
+And for Test Case 3, shared service accounts like deploy-bot and billing-service were classified as non-human and excluded, generating zero false positives."
+
+
+----------------------------------------------------------------------
+PART 4: TC4 HUMAN-IN-THE-LOOP (HITL) GATE (1:35 - 2:05)
+----------------------------------------------------------------------
+[ACTION]:
+Click "HITL Approvals" in the sidebar.
+Show pending tickets for Alex Mercer.
+Click "Approve All" (or individual approve).
+Watch the queue clear, then expand "Verified Revocation History".
+Click "Mock Consoles" in the sidebar and show Alex Mercer / Marcus Vance now marked DEACTIVATED.
+
+[READ THIS]:
+"Here is Test Case 4: The Human-in-the-Loop Gate. The agent never blindly executes revocations without human authorization.
+
+Once the security auditor reviews the blast radius and clicks 'Approve', the agent invokes the revocation payload, autonomously re-queries the console endpoints, and verifies that the account state has flipped from ACTIVE to DEACTIVATED."
+
+
+----------------------------------------------------------------------
+PART 5: TEST SUITE & CONCLUSION (2:05 - 2:30)
+----------------------------------------------------------------------
+[ACTION]:
+Click "Test Suite (TC1-TC4)" in the sidebar.
+Click "Run Test Suite" and show 4 out of 4 checkmarks passing.
+Quickly click "Compliance Report" and show the exportable SOC 2 report.
+
+[READ THIS]:
+"Every single test case has 100% automated assertion coverage directly inside the platform and via CLI in TypeScript and Python.
+
+Finally, AtherControl compiles a formal, audit-ready SOC 2 CC6.2 Access Review Report with cryptographic evidence binding.
+
+AtherControl is deployed live at control.athergrid.dev, and the open-source repository is available on GitHub. Thank you to Ziro Digital for this incredible challenge!"
+
+======================================================================
+END OF RECORDING
+======================================================================
