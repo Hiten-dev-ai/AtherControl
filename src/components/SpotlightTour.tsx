@@ -143,30 +143,36 @@ export const SpotlightTour: React.FC<SpotlightTourProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] pointer-events-auto">
-      {/* Dimmed backdrop */}
-      <div 
-        className="absolute inset-0 bg-slate-950/40 backdrop-blur-[1px] transition-all duration-200"
-        onClick={onClose}
-      />
-
-      {/* Spotlight cutout outline */}
-      {targetRect && (
+    <div className="fixed inset-0 z-[100] pointer-events-auto overflow-hidden">
+      {/* Spotlight cutout outline with massive outer shadow - inside is 100% sharp and unblurred */}
+      {targetRect ? (
         <div
-          className="absolute border-2 border-emerald-600 rounded-lg pointer-events-none transition-all duration-200 shadow-[0_0_0_9999px_rgba(15,23,42,0.45)]"
+          className="fixed border-2 border-emerald-500 rounded-lg pointer-events-none transition-all duration-200 shadow-[0_0_0_9999px_rgba(15,23,42,0.65)]"
           style={{
-            top: `${Math.max(0, targetRect.top - 4)}px`,
-            left: `${Math.max(0, targetRect.left - 4)}px`,
-            width: `${targetRect.width + 8}px`,
-            height: `${targetRect.height + 8}px`
+            top: `${Math.max(0, targetRect.top - 6)}px`,
+            left: `${Math.max(0, targetRect.left - 6)}px`,
+            width: `${targetRect.width + 12}px`,
+            height: `${targetRect.height + 12}px`
           }}
         />
+      ) : (
+        <div 
+          className="fixed inset-0 bg-slate-950/60 transition-all duration-200"
+          onClick={onClose}
+        />
       )}
+
+      {/* Invisible backdrop to capture clicks outside card */}
+      <div 
+        className="fixed inset-0 bg-transparent"
+        onClick={onClose}
+      />
 
       {/* Floating Anchored Modal Card (Condensed strictly to 1-2 sentences) */}
       <div 
         className="fixed z-[101] w-full max-w-sm bg-white rounded-xl shadow-2xl border border-slate-200 p-4 transition-all duration-150"
         style={getCardStyle()}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
